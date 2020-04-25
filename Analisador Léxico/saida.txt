@@ -1,0 +1,12 @@
+program, id
+p, id
+var, id
+x, id
+integer, id
+begin, id
+1, num_int
+while, id
+3.5, num_float
+do, id
+1, num_int
+end, id

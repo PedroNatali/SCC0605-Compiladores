@@ -1,0 +1,29 @@
+program simb_program 
+p id 
+; simb_pv
+var simb_var 
+x id 
+: simb_dp
+integer simb_tipo
+ ; simb_pv
+begin simb_begin 
+x id
+:= simb_atrib 
+1 num 
+; simb_pv
+while simb_while 
+( simb_apar
+
+x id 
+< simb_menor 
+3 num 
+) simb_fpar
+do simb_do 
+x id
+:= simb_atrib 
+x id 
++ simb_mais 
+1 num 
+; simb_pv
+end simb_end 
+. simb_p
