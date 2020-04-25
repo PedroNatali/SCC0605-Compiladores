@@ -1,8 +1,8 @@
 import analisador
 
 
-arquivo_entrada = "/home/pedronatali/Downloads/Compiladores/programa.txt"
-arquivo_saida = "/home/pedronatali/Downloads/Compiladores/saida.txt"
+arquivo_entrada = "programa.txt"
+arquivo_saida = "saida.txt"
 
 
 if __name__ == '__main__':
