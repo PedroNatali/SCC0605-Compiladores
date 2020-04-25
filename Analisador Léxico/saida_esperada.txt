@@ -13,7 +13,6 @@ x id
 ; simb_pv
 while simb_while 
 ( simb_apar
-
 x id 
 < simb_menor 
 3 num 

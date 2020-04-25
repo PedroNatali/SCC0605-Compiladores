@@ -1,8 +1,15 @@
 #Analisador Léxico
 #@authors Pedro Natali, Rafael Pinho and Patrick Feitosa
 
+#Tabela de simbolos especiais
+tab_especiais = [["program","simb_program"], ["begin","simb_begin"], ["end", "simb_end"], ["var","simb_var"],
+	["integer", "simb_tipo"], ["real", "simb_tipo"], ["while", "simb_while"], ["for", "simb_for"], ["do", "simb_do"], ["read", "simb_read"],
+	["write", "simb_write"], ["if", "simb_if"], ["else", "simb_else"], ["then", "simb_then"], ["ident", "simb_ident"]]
 
-def ler_arquivo(arquivo):           #retorna o arquivo texto como uma string
+
+
+#retorna o arquivo texto como uma string
+def ler_arquivo(arquivo):           
 	arq = open(arquivo,'r')
 	text = arq.read()
 	arq.close()
@@ -23,10 +30,18 @@ def automato_id(text,indice,saida,tabela):
 			elif ord(text[indice]) >= 48 and ord(text[indice]) <= 57:
 				cadeia = cadeia + text[indice]
 			else:
-				#se ja existir, nao precisa acrescentar
+				#se ja existir, so eh necessario citar novamente
 				if(busca_tabela(cadeia, tabela)):
+					i = acha_indice(cadeia,tabela)
+					tabela.append(tabela[i])
 					return indice, tabela
 				#senao acrescenta na tabela
+				elif(busca_tabela(cadeia,tab_especiais)):
+					#acha o indice e adiciona ele
+					i = acha_indice(cadeia,tab_especiais)
+					tabela.append(tab_especiais[i])
+					return indice,tabela
+
 				else:
 					cadeia_id = [cadeia, "id"]
 					tabela.append(cadeia_id)
@@ -80,6 +95,7 @@ def automato_numero(text,indice,saida,tabela):
 
 
 
+#Busca para analisar se ja esta na tabela
 def busca_tabela(cadeia, tabela):
 	i = 0
 	#Busca na tabela
@@ -88,11 +104,18 @@ def busca_tabela(cadeia, tabela):
 		if(cadeia == tabela[i][0]):
 			return 1
 		i = i + 1
-	#senao retorna false
 	return 0
 
-
-
+#usado para encontrar o indice 
+def acha_indice(cadeia,tabela):
+	i = 0
+	#Busca na tabela
+	while(i < len(tabela)):
+		#se achou, coloca ele na tabela do analisador
+		if(cadeia == tabela[i][0]):
+			return i
+		i = i +1
+	
 
 def main(arquivo_entrada, arquivo_saida):
 
@@ -102,7 +125,7 @@ def main(arquivo_entrada, arquivo_saida):
 
 	#Criando a tabela 
 	tabela = []
-
+	
 	#Enquanto nao terminar o texto, utilize os automatos
 	while(i < len(text)):
 		i,tabela = automato_comentario(text,i,saida,tabela)
