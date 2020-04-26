@@ -29,6 +29,23 @@ def automato_id(text,indice,saida,tabela):
 				
 			elif ord(text[indice]) >= 48 and ord(text[indice]) <= 57:
 				cadeia = cadeia + text[indice]
+
+			elif ord(text[indice]) >= 33 and ord(text[indice]) <= 38:
+				cadeia_id = [cadeia, "id"]
+				tabela.append(cadeia_id)
+				string = "Erro lexico: caractere " + text[indice] + " nao permitido em id"
+				cadeia_falsa = [text[indice], string]
+				tabela.append(cadeia_falsa)
+				return indice, tabela
+
+			elif ord(text[indice]) >= 63 and ord(text[indice]) <= 64:
+				cadeia_id = [cadeia, "id"]
+				tabela.append(cadeia_id)
+				string = "Erro lexico: caractere " + text[indice] + " nao permitido em id"
+				cadeia_falsa = [text[indice], string]
+				tabela.append(cadeia_falsa)
+				return indice, tabela
+
 			else:
 				#se ja existir, so eh necessario citar novamente
 				if(busca_tabela(cadeia, tabela)):
@@ -80,6 +97,7 @@ def automato_numero(text,indice,saida,tabela):
 			elif(ord(text[indice]) == 46):
 				cadeia = cadeia + text[indice]
 				ponto = 1
+
 			#se tem ponto eh float, senao int
 			else:
 				if (ponto == 0):
@@ -140,6 +158,12 @@ def automato_simbolos(text,indice,tabela):
 	elif(text[indice] == ')'):
 		tabela.append([')',"simb_fpar"])
 		return indice,tabela
+	elif(text[indice] == '.'):
+		tabela.append(['.',"simb_p"])
+		return indice,tabela
+	elif(text[indice] == ','):
+		tabela.append([',',"simb_v"])
+		return indice,tabela
 	else:
 		return indice,tabela
 
@@ -195,12 +219,22 @@ def main(arquivo_entrada, arquivo_saida):
 	
 	#Enquanto nao terminar o texto, utilize os automatos
 	while(i < len(text)):
-		i,tabela = automato_comentario(text,i,saida,tabela)
-		i,tabela = automato_id(text,i,saida,tabela)
-		i,tabela = automato_numero(text,i,saida,tabela)
-		i,tabela = automato_comparativos(text,i,tabela)
-		i,tabela = automato_simbolos(text,i,tabela)
-		i,tabela = automato_operandos(text,i,tabela)
+		a,tabela = automato_comentario(text,i,saida,tabela)
+		b,tabela = automato_id(text,a,saida,tabela)
+		c,tabela = automato_numero(text,b,saida,tabela)
+		d,tabela = automato_comparativos(text,c,tabela)
+		e,tabela = automato_simbolos(text,d,tabela)
+		f,tabela = automato_operandos(text,e,tabela)
+		
+		if(i != a and i != b and i!= c and i!=d and i!=e and i!= f):
+			if(text[f] != "\n" and text[f] != "\t" and text[f] != " "):
+				string = "Erro lexico: caractere" + text[indice] + "nao permitido"
+				cadeia_falsa = [text[indice], string]
+
+				cadeia_id = [text[f], "ERRO LEXICO: caractere invalido"]
+				tabela.append(cadeia_id)
+
+		i = f
 		i = i+1
 
 	#Imprimindo a tabela

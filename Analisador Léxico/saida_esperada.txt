@@ -3,6 +3,7 @@ p id
 ; simb_pv
 var simb_var 
 x id 
+@, erro('caractere não permitido')
 : simb_dp
 integer simb_tipo
  ; simb_pv
