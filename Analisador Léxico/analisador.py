@@ -57,7 +57,7 @@ def automato_comentario(text,indice,saida,tabela):
 		cadeia = '{'
 		for indice in range(indice,len(text)):
 			if text[indice] == '}':
-				cadeia_id = [cadeia, "}, comentario"]
+				cadeia_id = [cadeia , "comentario"]
 				tabela.append(cadeia_id)
 				return indice, tabela
 			else:
@@ -92,6 +92,73 @@ def automato_numero(text,indice,saida,tabela):
 					return indice, tabela
 	else:
 		return indice,tabela
+
+
+#autoamto que determina os comparativos do codigo
+def automato_comparativos(text, indice, tabela):
+	if(text[indice] == '='):
+		tabela.append(['=',"simb_igual"])
+		return indice,tabela
+	elif(text[indice] == '>'):
+		if(text[indice+1] == '='):
+			indice = indice+1
+			tabela.append([">=","simb_maior_igual"])
+			return indice, tabela
+		else:
+			tabela.append(['>',"simb_maior"])
+	elif(text[indice] == '<'):
+		if(text[indice+1] == '='):
+			indice = indice+1
+			tabela.append(["<=","simb_menor_igual"])
+			return indice,tabela
+		elif(text[indice+1] == '>'):
+			indice = indice+1
+			tabela.append(["<>","simb_diferente"])
+			return indice,tabela
+		else:
+			tabela.append(['<',"simb_menor"])
+			return indice,tabela
+	else:
+		return indice,tabela
+
+
+def automato_simbolos(text,indice,tabela):
+	if(text[indice] == ':'):
+		if(text[indice+1] == '='):
+			indice = indice+1
+			tabela.append([':=',"simb_atrib"])
+			return indice,tabela
+		else:
+			tabela.append([':',"simb_dp"])
+			return indice,tabela
+	elif(text[indice] == ';'):
+		tabela.append([';',"simb_pv"])
+		return indice,tabela
+	elif(text[indice] == '('):
+		tabela.append(['(',"simb_apar"])
+		return indice,tabela
+	elif(text[indice] == ')'):
+		tabela.append([')',"simb_fpar"])
+		return indice,tabela
+	else:
+		return indice,tabela
+
+def automato_operandos(text,indice,tabela):
+	if(text[indice] == '+'):
+		tabela.append(['+',"simb_soma"])
+		return indice,tabela
+	elif(text[indice] == '-'):
+		tabela.append(['-',"simb_sub"])
+		return indice,tabela
+	elif(text[indice] == '*'):
+		tabela.append(['*',"simb_mult"])
+		return indice,tabela
+	elif(text[indice] == '/'):
+		tabela.append(['/',"simb_div"])
+		return indice,tabela
+	else:
+		return indice,tabela
+
 
 
 
@@ -131,6 +198,9 @@ def main(arquivo_entrada, arquivo_saida):
 		i,tabela = automato_comentario(text,i,saida,tabela)
 		i,tabela = automato_id(text,i,saida,tabela)
 		i,tabela = automato_numero(text,i,saida,tabela)
+		i,tabela = automato_comparativos(text,i,tabela)
+		i,tabela = automato_simbolos(text,i,tabela)
+		i,tabela = automato_operandos(text,i,tabela)
 		i = i+1
 
 	#Imprimindo a tabela
@@ -143,4 +213,3 @@ def main(arquivo_entrada, arquivo_saida):
 		a = a + 1
 
 	saida.close()
-
