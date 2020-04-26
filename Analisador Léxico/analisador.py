@@ -127,17 +127,24 @@ def automato_numero(text,indice,tabela):
 
 			#se tem ponto eh float, senao int
 			else:
-				if (ponto == 0):
+				if(ord(text[indice]) >= 33 and ord(text[indice]) <= 38):
+					if (ponto == 0):
+						cadeia_id = [cadeia, "num_int"]
+						tabela.append(cadeia_id)
+					else:
+						cadeia_id = [cadeia, "num_float"]
+						tabela.append(cadeia_id)
+					string = "Erro lexico: caractere " + text[indice+1] + " invalido em id"
+					cadeia_falsa = [text[indice+1], string]
+					tabela.append(cadeia_falsa)
+					return indice, tabela
+				elif (ponto == 0):
 					cadeia_id = [cadeia, "num_int"]
 					tabela.append(cadeia_id)
-					if(not((ord(text[indice+1]) >= 48 and ord(text[indice+1]) <= 57) or ord(text[indice]) == 46)): 
-						tabela.append([text[indice],"Erro lexico: caractere "+text[indice]+" nao pertence a numero"])
 					return indice, tabela
 				else:
 					cadeia_id = [cadeia, "num_float"]
 					tabela.append(cadeia_id)
-					if(not((ord(text[indice+1]) >= 48 and ord(text[indice+1]) <= 57) or ord(text[indice]) == 46)):
-						tabela.append([text[indice],"Erro lexico: caractere "+text[indice]+"nao pertence a numero"])
 					return indice, tabela
 	else:
 		return indice,tabela
