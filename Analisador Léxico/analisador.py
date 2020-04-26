@@ -110,20 +110,34 @@ def automato_numero(text,indice,tabela):
 			elif(ord(text[indice]) == 46):
 				cadeia = cadeia + text[indice]
 				ponto = 1
+			#Erro numero invalido
+			elif((ord(text[indice+1]) >= 48 and ord(text[indice+1]) <= 57) or ord(text[indice+1]) == 46):
+				cadeia = cadeia + text[indice]
+				f = indice+1
+				for f in range(f,len(text)):
+					if(ord(text[f]) >= 48 and ord(text[f]) <= 57):
+						cadeia = cadeia + text[f]	
+					elif(ord(text[f]) == 46):
+						cadeia = cadeia + text[f]
+					else:
+						cadeia_id = [cadeia,"Erro lexico: numero invalido"]
+						tabela.append(cadeia_id)
+						return f, tabela
+
 
 			#se tem ponto eh float, senao int
 			else:
 				if (ponto == 0):
 					cadeia_id = [cadeia, "num_int"]
 					tabela.append(cadeia_id)
-					if(ord(text[indice+1]) >= 48 and ord(text[indice+1]) <= 57): 
-						tabela.append([text[indice],"erro_numerico"])
+					if(not((ord(text[indice+1]) >= 48 and ord(text[indice+1]) <= 57) or ord(text[indice]) == 46)): 
+						tabela.append([text[indice],"Erro lexico: caractere "+text[indice]+" nao pertence a numero"])
 					return indice, tabela
 				else:
 					cadeia_id = [cadeia, "num_float"]
 					tabela.append(cadeia_id)
-					if(ord(text[indice+1]) >= 48 and ord(text[indice+1]) <= 57):
-						tabela.append([text[indice],"Erro lexico: caractere " + text[indice]+ " invalido em numero"])
+					if(not((ord(text[indice+1]) >= 48 and ord(text[indice+1]) <= 57) or ord(text[indice]) == 46)):
+						tabela.append([text[indice],"Erro lexico: caractere "+text[indice]+"nao pertence a numero"])
 					return indice, tabela
 	else:
 		return indice,tabela
