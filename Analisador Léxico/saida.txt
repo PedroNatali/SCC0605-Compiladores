@@ -3,7 +3,7 @@ p, id
 ;, simb_pv
 var, simb_var
 x, id
-@, Erro lexico: caractere @ nao permitido em id
+@, Erro lexico: caractere @ invalido em id
 :, simb_dp
 integer, simb_tipo
 ;, simb_pv
