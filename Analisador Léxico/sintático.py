@@ -1,3 +1,6 @@
+#@authors Pedro Natali, Rafael Pinho, Patrick Feitosa
+
+
 def declare_variable(token, i):
 
 	if(token == "simb_var"):
@@ -77,7 +80,46 @@ def declare_variable(token, i):
 # 	else:
 # 		return "saindo"	
 
+### TEM QUE COLOCAR CONST_ID NO CÓDIGO DO ANALISADOR LEXICO, NAO TINHA ISSO ANTES 
+# def declare_constant(token, i):
+# 	if (token == "const_ID"):
+# 		if(token == ":"):
+# 			if(token == "num_int" or token == "num_float"):
+# 				if(token == "simb_pv"):
+# 					print("Sucess")
+# 				else:
+# 					print("Erro sintático: ';' esperado")
+# 			else:
+# 				print("Erro sintático, tipo esperado")
+# 		else:
+# 			print("Erro sintático, ':' esperado")
+# 	else:
+# 		return
 
+
+
+# def corpo_p(token, id):
+# 	declare_variable()
+
+# 	if(token == "begin"):
+# 		token = nextToken()
+# 		#INICIO PROGRAMA
+
+# 		#comandos
+# 		CMD()
+
+
+# 		#FIM PROGRAMA
+# 		if (token == "end"):
+# 			token = nextToken()
+# 			if(token == "."):
+# 				print("Sucess")
+# 			else:
+# 				print("Erro sintático, '.' esperado")
+# 		else:
+# 			print("Erro sintático, 'end' esperado")
+# 	else:
+# 		print("Erro sintático, 'begin' esperado")
 
 
 
