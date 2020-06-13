@@ -28,7 +28,7 @@ def declare_variable(token, i):
 
 					if(token == "simb_pv"):
 						return True
-						token = input()
+						token = tabela[i][1]
 
 					else:
 						print("Erro sintático: ';' esperado")
@@ -50,6 +50,32 @@ def declare_variable(token, i):
 
 	if(token == "simb_var"):
 		declare_variable(token, i)
+
+
+# --> Problema do condition atual é que comeca em ID sendo que vários outros também comecam. O problema é que leria o próximo token desconsiderando o ID
+# --> Solucao eh retroceder o i para encontrar o mesmo ID quando for rodar em outra aplicação 
+
+# def condition(token, i):
+# 	if(token == "id"):
+# 		nextToken()
+# 		if (token == ("+" or "-" or "/" or "*") ):
+# 			nextToken()
+# 			if(token == "id"):
+# 				nextToken()
+# 				if (token == "comparativos"):
+# 					nextToken()
+# 					if(token == "id"):
+# 						condition(token, i)
+# 					else:
+# 						return "sucesso"
+# 				else:
+# 					return "sucesso"
+# 			else:
+# 				return "Erro sintático, segundo termo esperado"
+# 		else:
+# 			return "sucesso"
+# 	else:
+# 		return "saindo"	
 
 
 
