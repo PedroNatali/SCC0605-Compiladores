@@ -329,7 +329,7 @@ def acha_indice(cadeia,tabela):
 
 ##### MELHOR MUDAR AS E CHAMAR A FUNCAO DO JEITO 
 ###### token, i = program(token, i, text)
-###### Pq dai eu n preciso chamar as funcoes uma dentro da outra necessariamente 
+	###### Pq dai eu n preciso chamar as funcoes uma dentro da outra necessariamente 
 
 def analisador_sintatico(tabela, i, text):
 	tabela, i = nextToken(tabela, i, text)
