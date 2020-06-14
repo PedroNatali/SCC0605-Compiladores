@@ -1,10 +1,12 @@
- 
 #Analisador Léxico
 #@authors Pedro Natali, Rafael Pinho and Patrick Feitosa
 
+#adicionado simb_to, erro de funcao escrita errada, adicionado procedure, adicionado constante, concertado simbolo maior
+#testes 1* 2 4 5 6 tao ok
+
 #Tabela de simbolos especiais
-tab_especiais = [["program","simb_program"], ["begin","simb_begin"], ["end", "simb_end"], ["var","simb_var"],
-	["integer", "simb_tipo"], ["real", "simb_tipo"], ["while", "simb_while"], ["for", "simb_for"], ["do", "simb_do"], ["read", "simb_read"],
+tab_especiais = [["program","simb_program"], ["begin","simb_begin"], ["end", "simb_end"], ["const","simb_const"], ["var","simb_var"],
+	["integer", "simb_tipo"], ["real", "simb_tipo"],["procedure", "simb_procedure"], ["while", "simb_while"], ["for", "simb_for"], ["to", "simb_to"], ["do", "simb_do"], ["read", "simb_read"],
 	["write", "simb_write"], ["if", "simb_if"], ["else", "simb_else"], ["then", "simb_then"], ["ident", "simb_ident"]]
 
 
@@ -17,209 +19,284 @@ def ler_arquivo(arquivo):
 
 
 #Automato de ID
-def automato_id(text,indice,tabela):
-	#Verifica se o texto do indice atual eh letra
-	if ( ord(text[indice]) >= 97 and ord(text[indice]) <= 122 ):
-		cadeia = text[indice]
-		indice = indice+1
-		#Verifica se eh texto ou numero
-		for indice in range(indice,len(text)):
-			if ord(text[indice]) >= 97 and ord(text[indice]) <= 122:
-				cadeia = cadeia+text[indice]
-				
-			elif ord(text[indice]) >= 48 and ord(text[indice]) <= 57:
-				cadeia = cadeia + text[indice]
+def automato_id(text,indice,tabela,verify):
+	if(verify):
+		#Verifica se o texto do indice atual eh letra
+		if ( ord(text[indice]) >= 97 and ord(text[indice]) <= 122 ):
+			cadeia = text[indice]
+			indice = indice+1
+			#Verifica se eh texto ou numero
+			for indice in range(indice,len(text)):
+				if ord(text[indice]) >= 97 and ord(text[indice]) <= 122:
+					cadeia = cadeia+text[indice]
+					
+				elif ord(text[indice]) >= 48 and ord(text[indice]) <= 57:
+					cadeia = cadeia + text[indice]
 
-			elif ord(text[indice]) >= 33 and ord(text[indice]) <= 38:
-				cadeia_id = [cadeia, "id"]
-				tabela.append(cadeia_id)
-				string = "Erro lexico: caractere " + text[indice] + " invalido em id"
-				cadeia_falsa = [text[indice], string]
-				tabela.append(cadeia_falsa)
-				return indice, tabela
-
-			elif ord(text[indice]) >= 63 and ord(text[indice]) <= 64:
-				cadeia_id = [cadeia, "id"]
-				tabela.append(cadeia_id)
-				string = "Erro lexico: caractere " + text[indice] + " invalido em id"
-				cadeia_falsa = [text[indice], string]
-				tabela.append(cadeia_falsa)
-				return indice, tabela
-
-			else:
-				#se ja existir, so eh necessario citar novamente
-				if(busca_tabela(cadeia, tabela)):
-					i = acha_indice(cadeia,tabela)
-					tabela.append(tabela[i])
-					return indice, tabela
-				#senao acrescenta na tabela
-				elif(busca_tabela(cadeia,tab_especiais)):
-					#acha o indice e adiciona ele
-					i = acha_indice(cadeia,tab_especiais)
-					tabela.append(tab_especiais[i])
-					return indice,tabela
-
-				else:
+				elif ord(text[indice]) >= 33 and ord(text[indice]) <= 38:
 					cadeia_id = [cadeia, "id"]
 					tabela.append(cadeia_id)
-					return indice, tabela
+					string = "Erro lexico: caractere " + text[indice] + " invalido em id"
+					cadeia_falsa = [text[indice], string]
+					tabela.append(cadeia_falsa)
+					verify = False
+					return indice, tabela,verify
+
+				elif ord(text[indice]) >= 63 and ord(text[indice]) <= 64:
+					cadeia_id = [cadeia, "id"]
+					tabela.append(cadeia_id)
+					string = "Erro lexico: caractere " + text[indice] + " invalido em id"
+					cadeia_falsa = [text[indice], string]
+					tabela.append(cadeia_falsa)
+					verify = False
+					return indice, tabela,verify
+
+				else:
+					#se ja existir, so eh necessario citar novamente
+					if(busca_tabela(cadeia, tabela)):
+						i = acha_indice(cadeia,tabela)
+						tabela.append(tabela[i])
+						verify = False
+						return indice, tabela,verify
+					#senao acrescenta na tabela
+					elif(busca_tabela(cadeia,tab_especiais)):
+						#acha o indice e adiciona ele
+						i = acha_indice(cadeia,tab_especiais)
+						tabela.append(tab_especiais[i])
+						verify = False
+						return indice,tabela,verify
+					elif text[indice] == '(' and tabela[len(tabela)-1] != ["procedure", "simb_procedure"]:
+						cadeia_id = [cadeia,"Erro lexico: função inexistente"]
+						tabela.append(cadeia_id)
+						verify = False
+						return indice, tabela,verify
+
+					elif tabela[len(tabela)-1] == ["procedure", "simb_procedure"]: 
+						cadeia_id = [cadeia,"id_procedure"]
+						tabela.append(cadeia_id)
+						tab_especiais.append(cadeia_id)
+						verify = False
+						return indice, tabela,verify
+					else:
+						'''if tabela[len(tabela)-1] == ["var","simb_var"]:
+							cadeia_id = [cadeia,"id"]
+							tabela.append(cadeia_id)
+							tab_especiais.append(cadeia_id)
+							return indice, tabela
+						else:
+							fake_indice = indice-1
+							while tabela[fake_indice][1] == "id" or tabela[fake_indice] ==[',', "simb_v"]:
+								if tabela[fake_indice] == ["var","simb_var"]:
+									cadeia_id = [cadeia,"id"]
+									tabela.append(cadeia_id)
+									tab_especiais.append(cadeia_id)
+									return indice, tabela
+								fake_indice = fake_indice - 1
+						'''
+						cadeia_id = [cadeia, "id"]
+						tabela.append(cadeia_id)
+						verify = False
+						return indice, tabela,verify
+		else:
+			return indice, tabela, verify
 	else:
-		return indice, tabela
+		return indice, tabela, verify
 
 
 #automato que delimita comentarios
-def automato_comentario(text,indice,tabela):
-	if text[indice] == '{':
-		indice = indice+1
-		cadeia = '{'
-		for indice in range(indice,len(text)):
-			if text[indice] == '}':
-				cadeia = cadeia + '}'
-				cadeia_id = [cadeia , "comentario"]
-				tabela.append(cadeia_id)
-				indice = indice+1
-				return indice, tabela
-			elif(ord(text[indice]) == 10 or ord(text[indice]) == 12):
-				new_indice = indice
-				for new_indice in range(new_indice,len(text)):
-					if(text[new_indice] == '}'):
-						indice = new_indice
-						tabela.append([cadeia,"Erro lexico: comentario de varias linhas"])
-						return indice+1, tabela
-				cadeia_id = [cadeia, "Erro lexico: comentario nao finalizado"]
-				tabela.append(cadeia_id)
-				indice = indice+1
-				return indice, tabela
-			else:
-				cadeia = cadeia + text[indice]
+def automato_comentario(text,indice,tabela,verify):
+	if(verify):
+		if text[indice] == '{':
+			indice = indice+1
+			cadeia = '{'
+			for indice in range(indice,len(text)):
+				if text[indice] == '}':
+					cadeia = cadeia + '}'
+					cadeia_id = [cadeia , "comentario"]
+					tabela.append(cadeia_id)
+					indice = indice+1
+					verify = False
+					return indice, tabela,verify
+				elif(ord(text[indice]) == 10 or ord(text[indice]) == 12):
+					new_indice = indice
+					for new_indice in range(new_indice,len(text)):
+						if(text[new_indice] == '}'):
+							indice = new_indice
+							tabela.append([cadeia,"Erro lexico: comentario de varias linhas"])
+							verify = False
+							return indice+1, tabela, verify
+					cadeia_id = [cadeia, "Erro lexico: comentario nao finalizado"]
+					tabela.append(cadeia_id)
+					#indice = indice+1
+					verify = False
+					return indice, tabela, verify
+				else:
+					cadeia = cadeia + text[indice]
+		else:
+			return indice, tabela, verify
 	else:
-		return indice, tabela
+		return indice, tabela, verify
 
 #automato que delimita os numeros presentes no codigo em P
-def automato_numero(text,indice,tabela):
+def automato_numero(text,indice,tabela,verify):
 	ponto = 0
-	#verifica se o texto do indice atual eh numero
-	if(ord(text[indice]) >= 48 and ord(text[indice]) <= 57):
-		cadeia = text[indice]
-		indice = indice +1
-		#verifica char a char da string analisando se há numeros nessa sequência 
-		for indice in range(indice, len(text)):
-			if(ord(text[indice]) >= 48 and ord(text[indice]) <= 57):
-				cadeia = cadeia + text[indice]
-			#Veriica se há ponto (falta colocar erros)	
-			elif(ord(text[indice]) == 46):
-				cadeia = cadeia + text[indice]
-				ponto = 1
-			#Erro numero invalido
-			elif((ord(text[indice+1]) >= 48 and ord(text[indice+1]) <= 57) or ord(text[indice+1]) == 46):
-				cadeia = cadeia + text[indice]
-				f = indice+1
-				for f in range(f,len(text)):
-					if(ord(text[f]) >= 48 and ord(text[f]) <= 57):
-						cadeia = cadeia + text[f]	
-					elif(ord(text[f]) == 46):
-						cadeia = cadeia + text[f]
-					else:
-						cadeia_id = [cadeia,"Erro lexico: numero invalido"]
-						tabela.append(cadeia_id)
-						return f, tabela
+	if(verify):
+		#verifica se o texto do indice atual eh numero
+		if(ord(text[indice]) >= 48 and ord(text[indice]) <= 57):
+			cadeia = text[indice]
+			indice = indice +1
+			#verifica char a char da string analisando se há numeros nessa sequência 
+			for indice in range(indice, len(text)):
+				if(ord(text[indice]) >= 48 and ord(text[indice]) <= 57):
+					cadeia = cadeia + text[indice]
+				#Veriica se há ponto (falta colocar erros)	
+				elif(ord(text[indice]) == 46):
+					cadeia = cadeia + text[indice]
+					ponto = 1
+				#Erro numero invalido
+				elif((ord(text[indice+1]) >= 48 and ord(text[indice+1]) <= 57) or ord(text[indice+1]) == 46):
+
+					cadeia = cadeia + text[indice]
+					f = indice+1
+					for f in range(f,len(text)):
+						if(ord(text[f]) >= 48 and ord(text[f]) <= 57):
+							cadeia = cadeia + text[f]	
+						elif(ord(text[f]) == 46):
+							cadeia = cadeia + text[f]
+						else:
+							cadeia_id = [cadeia,"Erro lexico: numero invalido"]
+							tabela.append(cadeia_id)
+							verify = False
+							return f, tabela,verify
 
 
-			#se tem ponto eh float, senao int
-			else:
-				if(ord(text[indice]) >= 33 and ord(text[indice]) <= 38):
-					if (ponto == 0):
+				#se tem ponto eh float, senao int
+				else:
+					if(ord(text[indice]) >= 33 and ord(text[indice]) <= 38):
+						if (ponto == 0):
+							cadeia_id = [cadeia, "num_int"]
+							tabela.append(cadeia_id)
+						else:
+							cadeia_id = [cadeia, "num_float"]
+							tabela.append(cadeia_id)
+						string = "Erro lexico: caractere " + text[indice+1] + " invalido em id"
+						cadeia_falsa = [text[indice+1], string]
+						tabela.append(cadeia_falsa)
+						verify = False
+						return indice,tabela,verify
+					elif (ponto == 0):
 						cadeia_id = [cadeia, "num_int"]
 						tabela.append(cadeia_id)
+						verify = False
+						return indice,tabela,verify
 					else:
 						cadeia_id = [cadeia, "num_float"]
 						tabela.append(cadeia_id)
-					string = "Erro lexico: caractere " + text[indice+1] + " invalido em id"
-					cadeia_falsa = [text[indice+1], string]
-					tabela.append(cadeia_falsa)
-					return indice, tabela
-				elif (ponto == 0):
-					cadeia_id = [cadeia, "num_int"]
-					tabela.append(cadeia_id)
-					return indice, tabela
-				else:
-					cadeia_id = [cadeia, "num_float"]
-					tabela.append(cadeia_id)
-					return indice, tabela
+						verify = False
+						return indice,tabela,verify
+		else:
+			return indice,tabela,verify
 	else:
-		return indice,tabela
+		return indice, tabela, verify
 
 
 #autoamto que determina os comparativos do codigo
-def automato_comparativos(text, indice, tabela):
-	if(text[indice] == '='):
-		tabela.append(['=',"simb_igual"])
-		return indice,tabela
-	elif(text[indice] == '>'):
-		if(text[indice+1] == '='):
-			indice = indice+1
-			tabela.append([">=","simb_maior_igual"])
-			return indice, tabela
+def automato_comparativos(text, indice, tabela,verify):
+	if(verify):
+		if(text[indice] == '='):
+			tabela.append(['=',"simb_igual"])
+			verify = False
+			return indice,tabela,verify
+		elif(text[indice] == '>'):
+			if(text[indice+1] == '='):
+				indice = indice+1
+				tabela.append([">=","simb_maior_igual"])
+				verify = False
+				return indice, tabela,verify
+			else:
+				tabela.append(['>',"simb_maior"])
+				verify = False
+				return indice, tabela,verify
+		elif(text[indice] == '<'):
+			if(text[indice+1] == '='):
+				indice = indice+1
+				tabela.append(["<=","simb_menor_igual"])
+				verify = False
+				return indice,tabela,verify
+			elif(text[indice+1] == '>'):
+				indice = indice+1
+				tabela.append(["<>","simb_diferente"])
+				verify = False
+				return indice,tabela,verify
+			else:
+				tabela.append(['<',"simb_menor"])
+				verify = False
+				return indice,tabela,verify
 		else:
-			tabela.append(['>',"simb_maior"])
-	elif(text[indice] == '<'):
-		if(text[indice+1] == '='):
-			indice = indice+1
-			tabela.append(["<=","simb_menor_igual"])
-			return indice,tabela
-		elif(text[indice+1] == '>'):
-			indice = indice+1
-			tabela.append(["<>","simb_diferente"])
-			return indice,tabela
-		else:
-			tabela.append(['<',"simb_menor"])
-			return indice,tabela
+			return indice,tabela,verify
 	else:
-		return indice,tabela
+		return indice, tabela, verify
 
 
-def automato_simbolos(text,indice,tabela):
-	if(text[indice] == ':'):
-		if(text[indice+1] == '='):
-			indice = indice+1
-			tabela.append([':=',"simb_atrib"])
-			return indice,tabela
+def automato_simbolos(text,indice,tabela,verify):
+	if(verify):
+		if(text[indice] == ':'):
+			if(text[indice+1] == '='):
+				indice = indice+1
+				tabela.append([':=',"simb_atrib"])
+				verify = False
+				return indice,tabela,verify
+			else:
+				tabela.append([':',"simb_dp"])
+				verify = False
+				return indice,tabela,verify
+		elif(text[indice] == ';'):
+			tabela.append([';',"simb_pv"])
+			verify = False
+			return indice,tabela,verify
+		elif(text[indice] == '('):
+			tabela.append(['(',"simb_apar"])
+			verify = False
+			return indice,tabela,verify
+		elif(text[indice] == ')'):
+			tabela.append([')',"simb_fpar"])
+			verify = False
+			return indice,tabela,verify
+		elif(text[indice] == '.'):
+			tabela.append(['.',"simb_p"])
+			verify = False
+			return indice,tabela,verify
+		elif(text[indice] == ','):
+			tabela.append([',',"simb_v"])
+			verify = False
+			return indice,tabela,verify
 		else:
-			tabela.append([':',"simb_dp"])
-			return indice,tabela
-	elif(text[indice] == ';'):
-		tabela.append([';',"simb_pv"])
-		return indice,tabela
-	elif(text[indice] == '('):
-		tabela.append(['(',"simb_apar"])
-		return indice,tabela
-	elif(text[indice] == ')'):
-		tabela.append([')',"simb_fpar"])
-		return indice,tabela
-	elif(text[indice] == '.'):
-		tabela.append(['.',"simb_p"])
-		return indice,tabela
-	elif(text[indice] == ','):
-		tabela.append([',',"simb_v"])
-		return indice,tabela
+			return indice,tabela,verify
 	else:
-		return indice,tabela
+		return indice, tabela, verify
 
-def automato_operandos(text,indice,tabela):
-	if(text[indice] == '+'):
-		tabela.append(['+',"simb_soma"])
-		return indice,tabela
-	elif(text[indice] == '-'):
-		tabela.append(['-',"simb_sub"])
-		return indice,tabela
-	elif(text[indice] == '*'):
-		tabela.append(['*',"simb_mult"])
-		return indice,tabela
-	elif(text[indice] == '/'):
-		tabela.append(['/',"simb_div"])
-		return indice,tabela
+def automato_operandos(text,indice,tabela,verify):
+	if(verify):
+		if(text[indice] == '+'):
+			tabela.append(['+',"simb_soma"])
+			verify = False
+			return indice,tabela,verify
+		elif(text[indice] == '-'):
+			tabela.append(['-',"simb_sub"])
+			verify = False
+			return indice,tabela,verify
+		elif(text[indice] == '*'):
+			tabela.append(['*',"simb_mult"])
+			verify = False
+			return indice,tabela,verify
+		elif(text[indice] == '/'):
+			tabela.append(['/',"simb_div"])
+			verify = False
+			return indice,tabela,verify
+		else:
+			return indice,tabela,verify
 	else:
-		return indice,tabela
+		return indice, tabela, verify
 
 
 
@@ -254,28 +331,9 @@ def main(arquivo_entrada, arquivo_saida):
 
 	#Criando a tabela 
 	tabela = []
-	
 	#Enquanto nao terminar o texto, utilize os automatos
 	while(i < len(text)):
-
-		tamanho = len(tabela)
-		a,tabela = automato_comentario(text,i,tabela)
-		b,tabela = automato_id(text,a,tabela)
-		c,tabela = automato_numero(text,b,tabela)
-		d,tabela = automato_comparativos(text,c,tabela)
-		e,tabela = automato_simbolos(text,d,tabela)
-		f,tabela = automato_operandos(text,e,tabela)
-		
-		if(tamanho == len(tabela)):
-			if(text[f] != "\n" and text[f] != "\t" and text[f] != " "):
-				string = "Erro lexico: caractere" + text[i] + "invalido"
-				cadeia_falsa = [text[i], string]
-
-				cadeia_id = [text[f], "Erro lexico: caractere invalido"]
-				tabela.append(cadeia_id)
-
-		i = f
-
+		tabela,i = nextToken(tabela,i,text)
 		i = i+1
 
 	#Imprimindo a tabela
@@ -288,3 +346,24 @@ def main(arquivo_entrada, arquivo_saida):
 		a = a + 1
 
 	saida.close()
+
+def nextToken(tabela,i,text):
+		verify = True
+		tamanho = len(tabela)
+		a,tabela,verify = automato_comentario(text,i,tabela,verify)
+		b,tabela,verify = automato_id(text,a,tabela,verify)
+		c,tabela,verify = automato_numero(text,b,tabela,verify)
+		d,tabela,verify = automato_comparativos(text,c,tabela,verify)
+		e,tabela,verify = automato_simbolos(text,d,tabela,verify)
+		f,tabela,verify = automato_operandos(text,e,tabela,verify)
+
+		if(tamanho == len(tabela)):
+			if(text[f] != "\n" and text[f] != "\t" and text[f] != " "):
+				string = "Erro lexico: caractere" + text[i] + "invalido"
+				cadeia_falsa = [text[i], string]
+
+				cadeia_id = [text[f], "Erro lexico: caractere invalido"]
+				tabela.append(cadeia_id)
+
+		i = f
+		return tabela,i
