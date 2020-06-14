@@ -335,11 +335,13 @@ def analisador_sintatico(tabela, i, text):
 	tabela, i = nextToken(tabela, i, text)
 	token = tabela[len(tabela) - 1][1]
 
-	print("cheguei")
 	token, i = program(token,tabela, i, text)	
 
 	token, i = dc_c(token,tabela, i, text)
 	token, i = dc_v(token, tabela,i, text)
+	token, i = dc_p(token, tabela, i, text)
+
+	print("Sucess")
 
 
 def program(token, tabela, i, text):
@@ -347,7 +349,7 @@ def program(token, tabela, i, text):
 		i = i+1
 		tabela, i = nextToken(tabela, i, text)
 		token = tabela[len(tabela)-1][1]
-		print(token + "Heu")
+		print(token)
 		if(token == "id"):
 			i = i + 1
 			tabela, i = nextToken(tabela, i, text)
@@ -361,43 +363,54 @@ def program(token, tabela, i, text):
 				return token, i
 
 def dc_c(token, tabela, i, text):
+	print(token)
 	if(token == "simb_const"):
 		i = i + 1
 		tabela, i = nextToken(tabela, i, text)
 		token = tabela[len(tabela)-1][1]
-		if(token == "simb_igual"):
+		print(token)
+		if(token == "id"):
 			i = i + 1
 			tabela, i = nextToken(tabela, i, text)
 			token = tabela[len(tabela)-1][1]
-			#TALVEZ PRECISE COLOCAR SIMBOLO ESPECIAL PRA INT E FLOAT
-			if(token == "simb_tipo"):
+			print(token)
+
+			if(token == "simb_igual"):
 				i = i + 1
 				tabela, i = nextToken(tabela, i, text)
 				token = tabela[len(tabela)-1][1]
-				if(token == "simb_pv"):
+				#TALVEZ PRECISE COLOCAR SIMBOLO ESPECIAL PRA INT E FLOAT
+				if(token == "simb_tipo"):
 					i = i + 1
 					tabela, i = nextToken(tabela, i, text)
 					token = tabela[len(tabela)-1][1]
-					if(token == "simb_const"):
-						print("MAIS UM C")
-						dc_c(token, i, text)
-					else:
-						print("SAI DO DC_C")
-						return token, i
+					if(token == "simb_pv"):
+						i = i + 1
+						tabela, i = nextToken(tabela, i, text)
+						token = tabela[len(tabela)-1][1]
+						if(token == "simb_const"):
+							print("MAIS UM C")
+							dc_c(token, i, text)
+						else:
+							print("SAI DO DC_C")
+							return token, i
 	else:
 		print("SAI DO DC_C")
 		return token, i
 
 def dc_v(token, tabela, i, text):
+	print(token)
 	if(token == "simb_var"):
 		i = i+1
 		tabela, i = nextToken(tabela, i, text)
 		token = tabela[len(tabela)-1][1]
 
+		print(token)
 		if(token == "id"):
 			i = i+1
 			tabela, i = nextToken(tabela, i, text)
 			token = tabela[len(tabela)-1][1]
+			print(token)
 
 			while(token == "simb_v"):
 				i = i+1
@@ -415,16 +428,20 @@ def dc_v(token, tabela, i, text):
 				i = i+1
 				tabela, i = nextToken(tabela, i, text)
 				token = tabela[len(tabela)-1][1]
+				print(token)
 
-				if(token == "num_int" or token == "num_float"):
+				if(token == "simb_tipo"):
 					i = i+1
 					tabela, i = nextToken(tabela, i, text)
 					token = tabela[len(tabela)-1][1]
+					print(token)
 
 					if(token == "simb_pv"):
 						i = i +1
 						tabela, i = nextToken(tabela, i, text)
 						token = tabela[len(tabela)-1][1]
+						print(token)
+
 						if(token == "simb_var"):
 							print("Mais um Dc_V")
 							dc_v(token,tabela, i, text)
@@ -575,10 +592,13 @@ def nextToken(tabela,i,text):
 		verify = True
 		tamanho = len(tabela)
 
+		if(i == len(text)):
+				return tabela,i
+
 		if(text[i] == "\n" or text[i] == "\t" or text[i] == " "):
 			i = i + 1
 			if(i == len(text)):
-				return tabela, i
+				return tabela,
 
 		a,tabela,verify = automato_comentario(text,i,tabela,verify)
 		b,tabela,verify = automato_id(text,a,tabela,verify)
