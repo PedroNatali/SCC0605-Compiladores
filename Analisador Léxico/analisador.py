@@ -341,6 +341,28 @@ def analisador_sintatico(tabela, i, text):
 	token, i = dc_v(token, tabela,i, text)
 	token, i = dc_p(token, tabela, i, text)
 
+	if(token == "simb_begin"):
+		while(token == "simb_read" or token =="simb_write" or token == "simb_while" or token == "simb_if" or token == "id" or token == simb_begin):
+			#token, i = cmd(token, i, text)
+			i = i+1
+			tabela, i = nextToken(tabela, i, text)
+			token = tabela[len(tabela)-1][1]
+			if(token == "simb_pv"):
+				i = i+1
+				tabela, i = nextToken(tabela, i, text)
+				token = tabela[len(tabela)-1][1]
+
+		if(token == "simb_end"):
+			i = i+1
+			tabela, i = nextToken(tabela, i, text)
+			token = tabela[len(tabela)-1][1]
+			if(token == "simb_p"):
+				i = i+1
+				tabela, i = nextToken(tabela, i, text)
+				token = tabela[len(tabela)-1][1]
+				print("Sucess")
+
+
 	print("Sucess")
 
 
