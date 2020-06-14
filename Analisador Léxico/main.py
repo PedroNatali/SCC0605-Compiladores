@@ -1,7 +1,7 @@
 import analisador
 
 
-arquivo_entrada = "programa.txt"
+arquivo_entrada = "in_test.txt"
 arquivo_saida = "saida.txt"
 
 

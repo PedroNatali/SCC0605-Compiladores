@@ -18,6 +18,8 @@ def ler_arquivo(arquivo):
 	return text
 
 
+######################################## ANALISADOR LÉXICO
+
 #Automato de ID
 def automato_id(text,indice,tabela,verify):
 	if(verify):
@@ -321,7 +323,134 @@ def acha_indice(cadeia,tabela):
 		if(cadeia == tabela[i][0]):
 			return i
 		i = i +1
-	
+
+
+
+
+######################################## ANALISADOR SINTÀTICO
+
+def analisador_sintatico(tabela, i, text):
+	tabela, i = nextToken(tabela, i, text)
+	token = tabela[len(tabela) - 1][1]
+	program(token, tabela, i, text)	
+
+
+def program(token, tabela, i, text):
+	print(token)
+	if (token == "simb_program"):
+		i = i+1
+		tabela, i = nextToken(tabela, i, text)
+		token = tabela[len(tabela)-1][1]
+		print(token)
+		if(token == "id"):
+			i = i + 1
+			tabela, i = nextToken(tabela, i, text)
+			token = tabela[len(tabela)-1][1]
+			print(token)
+			if(token == "simb_pv"):
+				i = i + 1
+				tabela, i = nextToken(tabela, i, text)
+				token = tabela[len(tabela)-1][1]
+				print("Sai do PROGRAM")
+				dc_c(token, tabela, i, text)
+
+
+def dc_c(token, tabela, i, text):
+	if(token == "simb_const"):
+		i = i + 1
+		tabela, i = nextToken(tabela, i, text)
+		token = tabela[len(tabela)-1][1]
+		if(token == "simb_igual"):
+			i = i + 1
+			tabela, i = nextToken(tabela, i, text)
+			token = tabela[len(tabela)-1][1]
+			#TALVEZ PRECISE COLOCAR SIMBOLO ESPECIAL PRA INT E FLOAT
+			if(token == "simb_tipo"):
+				i = i + 1
+				tabela, i = nextToken(tabela, i, text)
+				token = tabela[len(tabela)-1][1]
+				if(token == "simb_pv"):
+					i = i + 1
+					tabela, i = nextToken(tabela, i, text)
+					token = tabela[len(tabela)-1][1]
+					if(token == "simb_const"):
+						print("MAIS UM C")
+						dc_c(token, tabela, i, text)
+					else:
+						print("SAI DO DC_C")
+						dc_v(token, tabela, i, text)
+	else:
+		print("SAI DO DC_C")
+		dc_v(token, tabela, i, text)
+
+def dc_v(token, tabela, i, text):
+	if(token == "simb_var"):
+		i = i+1
+		tabela, i = nextToken(tabela, i, text)
+		token = tabela[len(tabela)-1][1]
+
+		if(token == "id"):
+			i = i+1
+			tabela, i = nextToken(tabela, i, text)
+			token = tabela[len(tabela)-1][1]
+
+			while(token == "simb_v"):
+				i = i+1
+				tabela, i = nextToken(tabela, i, text)
+				token = tabela[len(tabela)-1][1]
+
+				if(token == "id"):
+					i = i+1
+					tabela, i = nextToken(tabela, i, text)
+					token = tabela[len(tabela)-1][1]
+				else:
+					print("Erro sintático: 'id' esperado")
+
+			if (token == "simb_dp"):
+				i = i+1
+				tabela, i = nextToken(tabela, i, text)
+				token = tabela[len(tabela)-1][1]
+
+				if(token == "num_int" or token == "num_float"):
+					i = i+1
+					tabela, i = nextToken(tabela, i, text)
+					token = tabela[len(tabela)-1][1]
+
+					if(token == "simb_pv"):
+						i = i +1
+						tabela, i = nextToken(tabela, i, text)
+						token = tabela[len(tabela)-1][1]
+						if(token == "simb_var"):
+							print("Mais um Dc_V")
+							dc_v(token, tabela, i, text)
+						else:
+							print("Iria para o dc_p")
+							#dc_p()
+
+					else:
+						print("Erro sintático: ';' esperado")
+
+				else:
+					print ("Erro sintático: 'tipo' esperado")
+
+			#PROBLEMA AQUI, VEM x@ --> ELE considera os tokens id/erro (O token ERRO fode com o rolê, deveria dar o erro sem estar nos tokens a ser visto!)
+			else:
+				print ("Erro sintático: ':' ou ',' esperado")
+
+		else:
+			print ("Erro sintático: 'id' esperado")
+
+	else:
+		print("Iria para o dc_p")
+	#dc_p()
+
+
+
+
+######################################## FIM 
+
+
+
 
 def main(arquivo_entrada, arquivo_saida):
 
@@ -335,6 +464,9 @@ def main(arquivo_entrada, arquivo_saida):
 	while(i < len(text)):
 		tabela,i = nextToken(tabela,i,text)
 		i = i+1
+		print(tabela)
+		print()
+	#analisador_sintatico(tabela, i, text)
 
 	#Imprimindo a tabela
 	a = 0
@@ -350,6 +482,12 @@ def main(arquivo_entrada, arquivo_saida):
 def nextToken(tabela,i,text):
 		verify = True
 		tamanho = len(tabela)
+
+		if(text[i] == "\n" or text[i] == "\t" or text[i] == " "):
+			i = i + 1
+			if(i == len(text)):
+				return tabela, i
+
 		a,tabela,verify = automato_comentario(text,i,tabela,verify)
 		b,tabela,verify = automato_id(text,a,tabela,verify)
 		c,tabela,verify = automato_numero(text,b,tabela,verify)
