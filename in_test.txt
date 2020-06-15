@@ -1,3 +1,0 @@
-program p;
-const y = integer;
-var x: integer;

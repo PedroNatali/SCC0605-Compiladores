@@ -195,7 +195,7 @@ def corpo_p(token, tabela, i, text):
 		tabela, i = nextToken(tabela, i, text)
 		token = tabela[len(tabela)-1][1]
 
-		while(token == "simb_read" or token =="simb_write" or token == "simb_while" or token == "simb_if" or token == "id" or token == simb_begin):
+		while(token == "simb_read" or token =="simb_write" or token == "simb_while" or token == "simb_if" or token == "id" or token == "simb_begin"):
 			#token, tabela, i = cmd(token, tabela, i, text)
 			i = i+1
 			tabela, i = nextToken(tabela, i, text)

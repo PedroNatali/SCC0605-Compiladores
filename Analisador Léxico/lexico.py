@@ -321,31 +321,6 @@ def acha_indice(cadeia,tabela):
 		if(cadeia == tabela[i][0]):
 			return i
 		i = i +1
-	
-
-def main(arquivo_entrada, arquivo_saida):
-
-	saida = open(arquivo_saida,'w')
-	text = ler_arquivo(arquivo_entrada)
-	i = 0
-
-	#Criando a tabela 
-	tabela = []
-	#Enquanto nao terminar o texto, utilize os automatos
-	while(i < len(text)):
-		tabela,i = nextToken(tabela,i,text)
-		i = i+1
-
-	#Imprimindo a tabela
-	a = 0
-	while(a < len(tabela)):
-		saida.write(tabela[a][0])
-		saida.write(", ")
-		saida.write(tabela[a][1])
-		saida.write("\n")
-		a = a + 1
-
-	saida.close()
 
 def nextToken(tabela,i,text):
 		verify = True
