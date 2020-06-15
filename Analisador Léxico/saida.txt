@@ -1,5 +1,4 @@
 program, simb_program
-p, id
 ;, simb_pv
 const, simb_const
 y, id

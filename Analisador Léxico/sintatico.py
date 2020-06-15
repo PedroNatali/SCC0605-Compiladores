@@ -52,12 +52,15 @@ def program(token, tabela, i, text):
 			tabela, i = lexico.nextToken(tabela, i, text)
 			token = tabela[len(tabela)-1][1]
 			print(token)
-			if(token == "simb_pv"):
-				i = i + 1
-				tabela, i = lexico.nextToken(tabela, i, text)
-				token = tabela[len(tabela)-1][1]
-				print("Sai do PROGRAM")
-				return token, i
+		else:
+			print("Erro sintático: ID esperado")
+			
+		if(token == "simb_pv"):
+			i = i + 1
+			tabela, i = lexico.nextToken(tabela, i, text)
+			token = tabela[len(tabela)-1][1]
+			print("Sai do PROGRAM")
+			return token, i
 
 def dc_c(token, tabela, i, text):
 	print(token)
