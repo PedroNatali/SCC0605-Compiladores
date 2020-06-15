@@ -325,6 +325,15 @@ def acha_indice(cadeia,tabela):
 def nextToken(tabela,i,text):
 		verify = True
 		tamanho = len(tabela)
+
+		if(i == len(text)):
+			return tabela, i
+
+		if(text[i] == "\n" or text[i] == "\t" or text[i] == " "):
+			i = i + 1
+			if(i == len(text)):
+				return tabela, i
+
 		a,tabela,verify = automato_comentario(text,i,tabela,verify)
 		b,tabela,verify = automato_id(text,a,tabela,verify)
 		c,tabela,verify = automato_numero(text,b,tabela,verify)

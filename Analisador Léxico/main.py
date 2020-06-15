@@ -2,7 +2,7 @@ import lexico
 import sintatico
 
 
-arquivo_entrada = "programa.txt"
+arquivo_entrada = "in_test.txt"
 arquivo_saida = "saida.txt"
 
 
@@ -14,9 +14,11 @@ if __name__ == '__main__':
 	#Criando a tabela 
 	tabela = []
 	#Enquanto nao terminar o texto, utilize os automatos
-	while(i < len(text)):
-		tabela,i = lexico.nextToken(tabela,i,text)
-		i = i+1
+	# while(i < len(text)):
+	# 	tabela,i = lexico.nextToken(tabela,i,text)
+	# 	i = i+1
+
+	sintatico.analisador_sintatico(tabela, i, text)
 
 	#Imprimindo a tabela
 	a = 0
