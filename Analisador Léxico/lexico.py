@@ -6,7 +6,7 @@
 
 #Tabela de simbolos especiais
 tab_especiais = [["program","simb_program"], ["begin","simb_begin"], ["end", "simb_end"], ["const","simb_const"], ["var","simb_var"],
-	["integer", "simb_tipo"], ["real", "simb_tipo"],["procedure", "simb_procedure"], ["while", "simb_while"], ["for", "simb_for"], ["to", "simb_to"], ["do", "simb_do"], ["read", "simb_read"],
+	["integer", "simb_tipo"], ["real", "simb_tipo"],["int","simb_int"],["float","simb_float"],["procedure", "simb_procedure"], ["while", "simb_while"], ["for", "simb_for"], ["to", "simb_to"], ["do", "simb_do"], ["read", "simb_read"],
 	["write", "simb_write"], ["if", "simb_if"], ["else", "simb_else"], ["then", "simb_then"], ["ident", "simb_ident"]]
 
 
@@ -17,9 +17,15 @@ def ler_arquivo(arquivo):
 	arq.close()
 	return text
 
+def ler_arquivo2(arquivo):
+	arq = open(arquivo,'r')
+	text = arq.readlines()
+	arq.close()
+	return text
+
 
 #Automato de ID
-def automato_id(text,indice,tabela,verify):
+def automato_id(text,indice,linha,tabela,verify):
 	if(verify):
 		#Verifica se o texto do indice atual eh letra
 		if ( ord(text[indice]) >= 97 and ord(text[indice]) <= 122 ):
@@ -36,7 +42,7 @@ def automato_id(text,indice,tabela,verify):
 				elif ord(text[indice]) >= 33 and ord(text[indice]) <= 38:
 					cadeia_id = [cadeia, "id"]
 					tabela.append(cadeia_id)
-					string = "Erro lexico: caractere " + text[indice] + " invalido em id"
+					string = "Erro lexico na linha "+ str(linha) +": caractere " + text[indice] + " invalido em id"
 					cadeia_falsa = [text[indice], string]
 					tabela.append(cadeia_falsa)
 					verify = False
@@ -45,7 +51,7 @@ def automato_id(text,indice,tabela,verify):
 				elif ord(text[indice]) >= 63 and ord(text[indice]) <= 64:
 					cadeia_id = [cadeia, "id"]
 					tabela.append(cadeia_id)
-					string = "Erro lexico: caractere " + text[indice] + " invalido em id"
+					string = "Erro lexico na linha "+ str(linha) +": caractere " + text[indice] + " invalido em id"
 					cadeia_falsa = [text[indice], string]
 					tabela.append(cadeia_falsa)
 					verify = False
@@ -66,7 +72,7 @@ def automato_id(text,indice,tabela,verify):
 						verify = False
 						return indice-1,tabela,verify
 					elif text[indice] == '(' and tabela[len(tabela)-1] != ["procedure", "simb_procedure"]:
-						cadeia_id = [cadeia,"Erro lexico: função inexistente"]
+						cadeia_id = [cadeia,"Erro lexico na linha "+ str(linha) +": função inexistente"]
 						tabela.append(cadeia_id)
 						verify = False
 						return indice-1, tabela,verify
@@ -78,21 +84,6 @@ def automato_id(text,indice,tabela,verify):
 						verify = False
 						return indice-1, tabela,verify
 					else:
-						'''if tabela[len(tabela)-1] == ["var","simb_var"]:
-							cadeia_id = [cadeia,"id"]
-							tabela.append(cadeia_id)
-							tab_especiais.append(cadeia_id)
-							return indice, tabela
-						else:
-							fake_indice = indice-1
-							while tabela[fake_indice][1] == "id" or tabela[fake_indice] ==[',', "simb_v"]:
-								if tabela[fake_indice] == ["var","simb_var"]:
-									cadeia_id = [cadeia,"id"]
-									tabela.append(cadeia_id)
-									tab_especiais.append(cadeia_id)
-									return indice, tabela
-								fake_indice = fake_indice - 1
-						'''
 						cadeia_id = [cadeia, "id"]
 						tabela.append(cadeia_id)
 						verify = False
@@ -104,7 +95,7 @@ def automato_id(text,indice,tabela,verify):
 
 
 #automato que delimita comentarios
-def automato_comentario(text,indice,tabela,verify):
+def automato_comentario(text,indice,linha,tabela,verify):
 	if(verify):
 		if text[indice] == '{':
 			indice = indice+1
@@ -122,10 +113,10 @@ def automato_comentario(text,indice,tabela,verify):
 					for new_indice in range(new_indice,len(text)):
 						if(text[new_indice] == '}'):
 							indice = new_indice
-							tabela.append([cadeia,"Erro lexico: comentario de varias linhas"])
+							tabela.append([cadeia,"Erro lexico na linha "+ str(linha) +": comentario de varias linhas"])
 							verify = False
 							return indice+1, tabela, verify
-					cadeia_id = [cadeia, "Erro lexico: comentario nao finalizado"]
+					cadeia_id = [cadeia, "Erro lexico na linha "+ str(linha) +": comentario nao finalizado"]
 					tabela.append(cadeia_id)
 					#indice = indice+1
 					verify = False
@@ -138,7 +129,7 @@ def automato_comentario(text,indice,tabela,verify):
 		return indice, tabela, verify
 
 #automato que delimita os numeros presentes no codigo em P
-def automato_numero(text,indice,tabela,verify):
+def automato_numero(text,indice,linha,tabela,verify):
 	ponto = 0
 	if(verify):
 		#verifica se o texto do indice atual eh numero
@@ -164,7 +155,7 @@ def automato_numero(text,indice,tabela,verify):
 						elif(ord(text[f]) == 46):
 							cadeia = cadeia + text[f]
 						else:
-							cadeia_id = [cadeia,"Erro lexico: numero invalido"]
+							cadeia_id = [cadeia,"Erro lexico na linha "+ str(linha) +": numero invalido"]
 							tabela.append(cadeia_id)
 							verify = False
 							return f, tabela,verify
@@ -179,7 +170,7 @@ def automato_numero(text,indice,tabela,verify):
 						else:
 							cadeia_id = [cadeia, "num_float"]
 							tabela.append(cadeia_id)
-						string = "Erro lexico: caractere " + text[indice+1] + " invalido em id"
+						string = "Erro lexico na linha "+ str(linha) +": caractere " + text[indice+1] + " invalido em id"
 						cadeia_falsa = [text[indice+1], string]
 						tabela.append(cadeia_falsa)
 						verify = False
@@ -201,7 +192,7 @@ def automato_numero(text,indice,tabela,verify):
 
 
 #autoamto que determina os comparativos do codigo
-def automato_comparativos(text, indice, tabela,verify):
+def automato_comparativos(text, indice,linha,tabela,verify):
 	if(verify):
 		if(text[indice] == '='):
 			tabela.append(['=',"simb_igual"])
@@ -238,7 +229,7 @@ def automato_comparativos(text, indice, tabela,verify):
 		return indice, tabela, verify
 
 
-def automato_simbolos(text,indice,tabela,verify):
+def automato_simbolos(text,indice,linha,tabela,verify):
 	if(verify):
 		if(text[indice] == ':'):
 			if(text[indice+1] == '='):
@@ -275,7 +266,7 @@ def automato_simbolos(text,indice,tabela,verify):
 	else:
 		return indice, tabela, verify
 
-def automato_operandos(text,indice,tabela,verify):
+def automato_operandos(text,indice,linha,tabela,verify):
 	if(verify):
 		if(text[indice] == '+'):
 			tabela.append(['+',"simb_soma"])
@@ -321,7 +312,7 @@ def acha_indice(cadeia,tabela):
 		if(cadeia == tabela[i][0]):
 			return i
 		i = i +1
-
+'''
 def nextToken(tabela,i,text):
 		verify = True
 		tamanho = len(tabela)
@@ -346,8 +337,39 @@ def nextToken(tabela,i,text):
 				string = "Erro lexico: caractere" + text[i] + "invalido"
 				cadeia_falsa = [text[i], string]
 
-				cadeia_id = [text[f], "Erro lexico: caractere invalido"]
+				cadeia_id = [text[f], "Erro lexico na linha "+ str(linha) +": caractere invalido"]
 				tabela.append(cadeia_id)
 
 		i = f
 		return tabela,i
+'''
+def nextToken(tabela,i,linha,text):
+		verify = True
+		tamanho = len(tabela)
+		if(i == len(text)):
+			return tabela, i
+
+		if(text[i] == "\n" or text[i] == "\t" or text[i] == " "):
+			if(text[i] == "\n"):
+				linha = linha+1
+			i = i + 1
+			if(i == len(text)):
+				return tabela, i
+
+		a,tabela,verify = automato_comentario(text,i,linha,tabela,verify)
+		b,tabela,verify = automato_id(text,a,linha,tabela,verify)
+		c,tabela,verify = automato_numero(text,b,linha,tabela,verify)
+		d,tabela,verify = automato_comparativos(text,c,linha,tabela,verify)
+		e,tabela,verify = automato_simbolos(text,d,linha,tabela,verify)
+		f,tabela,verify = automato_operandos(text,e,linha,tabela,verify)
+
+		if(tamanho == len(tabela)):
+			if(text[f] != "\n" and text[f] != "\t" and text[f] != " "):
+				string = "Erro lexico na linha "+ str(linha) +": caractere" + text[i] + "invalido"
+				cadeia_falsa = [text[i], string]
+
+				cadeia_id = [text[f], "Erro lexico: caractere invalido"]
+				tabela.append(cadeia_id)
+
+		i = f
+		return tabela,i,linha
