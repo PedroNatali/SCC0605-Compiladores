@@ -267,7 +267,6 @@ def dc_p(token, tabela, i, text):
 	else:
 		return token, i
 
-
 def corpo_p(token, tabela, i, text):
 	dc_v(token, i, text)
 	i = i+1
@@ -316,7 +315,6 @@ def corpo_p(token, tabela, i, text):
 	else:
 		print("Erro sintático: begin esperado")
 		return token, i
-
 
 def cmd(token,tabela,i,text):
 	print(token)
@@ -377,7 +375,7 @@ def cmd(token,tabela,i,text):
 			token = tabela[len(tabela)-1][1]
 		else:
 			print("Erro sintático: ( esperado")
-		#token, i = condicao()
+		#token, i = condicao(token, tabela, i, text)
 		print(token)
 		if(token == "simb_fpar"):
 			i = i+1
@@ -480,30 +478,151 @@ def cmd(token,tabela,i,text):
 			return token, i
 	return token, i
 
+#<condicao>
+def condicao(token, tabela, i, text):
 
+	#<expressao>
+	token,i = expressao(token,tabela,i,text)
+	
+	# igual
+	if(token == simb_igual):
+		print(token)
+		# next_token	
+		i = i+1
+		tabela, i = lexico.nextToken(tabela, i, text)
+		token = tabela[len(tabela)-1][1]
+
+	# dif
+	elif(token == simb_dif):
+		print(token)
+		# next_token	
+		i = i+1
+		tabela, i = lexico.nextToken(tabela, i, text)
+		token = tabela[len(tabela)-1][1]
+
+	# maior igual
+	elif(token == simb_maior_igual):
+		print(token)
+		# next_token	
+		i = i+1
+		tabela, i = lexico.nextToken(tabela, i, text)
+		token = tabela[len(tabela)-1][1]
+
+	# menor igual
+	elif(token == simb_menor_igual):
+		print(token)
+		# next_token	
+		i = i+1
+		tabela, i = lexico.nextToken(tabela, i, text)
+		token = tabela[len(tabela)-1][1]
+
+	# maior
+	elif(token == simb_maior):
+		print(token)
+		# next_token	
+		i = i+1
+		tabela, i = lexico.nextToken(tabela, i, text)
+		token = tabela[len(tabela)-1][1]
+
+	# menor
+	elif(token == simb_menor):
+		print(token)
+		# next_token	
+		i = i+1
+		tabela, i = lexico.nextToken(tabela, i, text)
+		token = tabela[len(tabela)-1][1]
+	else:
+		print("Erro sintatico: Falta de um simbolo de condicao")
+	
+	#<expressao>
+	token,i = expressao(token,tabela,i,text)
+
+#<espressao>
 def expressao(token,tabela,i, text):
+
+	## TALVEZ N PRECISE DISSO, TEM QUE VERIFICAR SE A FUNÇAO
+	## QUE CHAMA a expressao JA LEU O TOKEN
+	'''
+	i = i+1
+	tabela, i = lexico.nextToken(tabela, i, text)
+	token = tabela[len(tabela)-1][1]
+	'''
 	print(token)
+
+	# <termo> - pode ser simb_soma, simb_sub ou lambda
+	token,i = termo(token, tabela, i, text)
+
+	# <outros_termos>
+	while(token == "simb_soma" or token == "simb_sub"):
+		token,i = termo(token, tabela, i, text)
+	
+	return token, i	
+
+#<termo>
+def termo(token, tabela, i, text):
+
+	## <op_un>
 	if(token == "simb_soma" or token == "simb_sub"):
 		i = i+1
 		tabela, i = lexico.nextToken(tabela, i, text)
 		token = tabela[len(tabela)-1][1]
+
+	## <fator> ## VERIFICAR SE ESSA CONDICAO PRECISA SER FEITA OU CHAMA FATOR DIRETO
+	if(token == "id" or token == "simb_tipo" or token == "simb_apar"):
 		print(token)
-	if(token == "id"):
-		print("token")
-	elif(token == "simb_apar"):
+		token, i = fator(token, tabela, i, text)
+	else:## erro do fator
+		print("Erro sintático: fator esperado")
+
+	## <mais_fatores>
+	while(token == "simb_mult" or token == "simb_div"):
+		token, i = fator(token, tabela, i, text)
+
+	return token, i
+	
+#<fator>
+def fator(token, tabela, i, text):
+	
+	if(token == "id"): # ID
+	
 		i = i+1
 		tabela, i = lexico.nextToken(tabela, i, text)
 		token = tabela[len(tabela)-1][1]
-		print("expressao")
-		#token, i = expressao(token,tabela,i, text)
-		if(token == "simb_fpar"):
+
+		print(token)
+
+	elif(token == "simb_tipo"): # numero real ou int
+
+		i = i+1
+		tabela, i = lexico.nextToken(tabela, i, text)
+		token = tabela[len(tabela)-1][1]
+
+		print(token)
+
+	#(<expressao>)
+	elif(token == "simb_apar"): # '('
+	
+		i = i+1
+		tabela, i = lexico.nextToken(tabela, i, text)
+		token = tabela[len(tabela)-1][1]
+		#print("expressao")
+		
+		token, i = expressao(token,tabela,i, text)
+		
+		if(token == "simb_fpar"): # ')'
 			i = i+1
 			tabela, i = lexico.nextToken(tabela, i, text)
 			token = tabela[len(tabela)-1][1]
 		else:
-			print("Erro sintático: := esperado")
+			print("Erro sintático: : ')' esperado")
 	else:
+		## talvez n precise dessa condicao,
 		print("Erro sintático: expressao esperado")
+
+
+	return i, token
+
+
 
 
 
