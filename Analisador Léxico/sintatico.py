@@ -251,7 +251,6 @@ def dc_p(token, tabela, i, text):
 			print(token)
 		else:
 			print("Erro sintático: ) esperado")
-
 		if(token == "simb_pv"):
 			i = i+1
 			tabela, i = lexico.nextToken(tabela, i, text)
@@ -395,7 +394,28 @@ def cmd(token,tabela,i,text):
 			print("Erro sintático: do esperado")
 		return cmd(token,tabela,i,text)
 	elif(token == "simb_if"):
-		print("if")
+		i = i+1
+		tabela, i = lexico.nextToken(tabela, i, text)
+		token = tabela[len(tabela)-1][1]
+		#token, i = condicao(token, tabela, i, text)
+		print(token)
+		if(token =="simb_then"):
+			i = i+1
+			tabela, i = lexico.nextToken(tabela, i, text)
+			token = tabela[len(tabela)-1][1]
+		else:
+			print("Erro sintático: then esperado")
+		while(token == "simb_read" or token =="simb_write" or token == "simb_while" or token == "simb_if" or token == "id" or token == "simb_begin"):
+			token,i = cmd(token,tabela,i,text)
+			print(token)
+			if(token == "simb_else"):
+				i = i+1
+				tabela, i = lexico.nextToken(tabela, i, text)
+				token = tabela[len(tabela)-1][1]
+			elif(token == "simb_read" or token =="simb_write" or token == "simb_while" or token == "simb_if" or token == "id" or token == "simb_begin"):
+				continue
+			else:
+				return token,i
 	elif(token == "simb_begin"):
 		i = i+1
 		tabela, i = lexico.nextToken(tabela, i, text)
