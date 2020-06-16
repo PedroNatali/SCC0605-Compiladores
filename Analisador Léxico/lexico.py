@@ -346,15 +346,16 @@ def nextToken(tabela,i,text):
 def nextToken(tabela,i,linha,text):
 		verify = True
 		tamanho = len(tabela)
+
 		if(i == len(text)):
-			return tabela, i
+			return tabela, i, linha
 
 		if(text[i] == "\n" or text[i] == "\t" or text[i] == " "):
 			if(text[i] == "\n"):
 				linha = linha+1
 			i = i + 1
 			if(i == len(text)):
-				return tabela, i
+				return tabela, i, linhas
 
 		a,tabela,verify = automato_comentario(text,i,linha,tabela,verify)
 		b,tabela,verify = automato_id(text,a,linha,tabela,verify)
