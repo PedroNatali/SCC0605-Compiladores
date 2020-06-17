@@ -8,18 +8,24 @@ import lexico
 
 def analisador_sintatico(tabela, i, text):
 	linha = 1
+	#Encontra o primeiro token
 	tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 	token = tabela[len(tabela) - 1][1]
 	print(token)
 
+	#Passa para o program
 	token, i, linha = program(token,tabela, i, linha, text)	
+	#Passa para o dc_c
 	token, i, linha = dc_c(token,tabela, i, linha, text)
+	#Passa para o dc_v
 	token, i, linha = dc_v(token, tabela,i, linha, text)
+	#Passa para o dc_p
 	print("Token dps da dc_v: " + token)
 	token, i, linha = dc_p(token, tabela, i, linha, text)
 
+	#Se o token apos a declaracao for simb_begin
 	if(token == "simb_begin"):
-
+		#Rode o CMD enquanto precisar
 		while(token == "simb_read" or token =="simb_write" or token == "simb_while" or token == "simb_if" or token == "id" or token == "simb_begin"):
 			token, i, linha = cmd(token, tabela, i, linha, text)
 			i = i+1
@@ -48,11 +54,13 @@ def analisador_sintatico(tabela, i, text):
 	# 	print("FIM DO PROGRAMA")
 	# else:
 	# 	print("Erro sintático na linha "+str(linha)+": . esperado")
+	else:
+		print("Erro sintático na linha "+str(linha)+": begin esperado")
 
 	print(token)
 	print("FIM DO PROGRAMA")
 
-
+#program := simb_program id;
 def program(token, tabela, i, linha, text):
 	if (token == "simb_program"):
 		i = i+1
@@ -83,6 +91,7 @@ def program(token, tabela, i, linha, text):
 			print("saida do program")
 			return token, i, linha
 
+#declaracao de constante := simb_const id = simb_tipo;
 def dc_c(token, tabela, i, linha, text):
 	if(token == "simb_const"):
 		i = i + 1
@@ -134,6 +143,7 @@ def dc_c(token, tabela, i, linha, text):
 		print("saida do dc_c")
 		return token, i, linha
 
+#declaracao de variavel := var x(,y) : integer|float;
 def dc_v(token, tabela, i, linha, text):
 	if(token == "simb_var"):
 		i = i+1
@@ -198,6 +208,7 @@ def dc_v(token, tabela, i, linha, text):
 		print("saida do dc_v")
 		return token, i, linha
 
+#declaracao de procedure: simb_procedure id_procedure ( id(,id) : simb_tipo ); <corpo_p>
 def dc_p(token, tabela, i, linha, text):
 	if(token == "simb_procedure"):
 		i = i+1
@@ -284,6 +295,8 @@ def dc_p(token, tabela, i, linha, text):
 	else:
 		return token, i, linha
 
+
+#Corpo_p :=  <cmd> {se o primeiro simbolo for begin}
 def corpo_p(token, tabela, i, linha, text):
 	token, i, linha = dc_v(token, tabela, i, linha, text)
 	print(token)
