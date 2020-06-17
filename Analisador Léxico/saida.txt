@@ -1,45 +1,5 @@
-program, simb_program
-teste1, id
-;, simb_pv
-var, simb_var
-a, id
-,, simb_v
-b, id
-:, simb_dp
-integer, simb_tipo
-;, simb_pv
-begin, simb_begin
-if, simb_if
-(, simb_apar
-(, simb_apar
-a, id
-+, simb_soma
-1, num_int
-), simb_fpar
-*, simb_mult
-5.4, num_float
-), simb_fpar
-<>, simb_diferente
-(, simb_apar
-8, num_int
-*, simb_mult
-b, id
-+, simb_soma
-9, num_int
-), simb_fpar
-*, simb_mult
-10, num_int
-/, simb_div
-f, id
-then, simb_then
-begin, simb_begin
-a, id
-:=, simb_atrib
-c, id
-+, simb_soma
-x, id
-;, simb_pv
-end, simb_end
-;, simb_pv
-end, simb_end
-., simb_p
+Erro sintático na linha 2: integer ou real esperado
+Erro lexico na linha 3: caractere invalido
+Erro lexico na linha 11: caractere @ invalido em id
+Erro sintático na linha 11: id esperado
+Erro sintático na linha 14: ; esperado

@@ -43,7 +43,7 @@ def automato_id(text,indice,linha,tabela,verify):
 					cadeia_id = [cadeia, "id"]
 					tabela.append(cadeia_id)
 					string = "Erro lexico na linha "+ str(linha) +": caractere " + text[indice] + " invalido em id"
-					cadeia_falsa = [text[indice], string]
+					cadeia_falsa = ["erro", string]
 					tabela.append(cadeia_falsa)
 					verify = False
 					return indice, tabela,verify
@@ -52,7 +52,7 @@ def automato_id(text,indice,linha,tabela,verify):
 					cadeia_id = [cadeia, "id"]
 					tabela.append(cadeia_id)
 					string = "Erro lexico na linha "+ str(linha) +": caractere " + text[indice] + " invalido em id"
-					cadeia_falsa = [text[indice], string]
+					cadeia_falsa = ["erro", string]
 					tabela.append(cadeia_falsa)
 					verify = False
 					return indice, tabela,verify
@@ -72,7 +72,7 @@ def automato_id(text,indice,linha,tabela,verify):
 						verify = False
 						return indice-1,tabela,verify
 					elif text[indice] == '(' and tabela[len(tabela)-1] != ["procedure", "simb_procedure"]:
-						cadeia_id = [cadeia,"Erro lexico na linha "+ str(linha) +": função inexistente"]
+						cadeia_id = ["erro","Erro lexico na linha "+ str(linha) +": função inexistente"]
 						tabela.append(cadeia_id)
 						verify = False
 						return indice-1, tabela,verify
@@ -113,10 +113,10 @@ def automato_comentario(text,indice,linha,tabela,verify):
 					for new_indice in range(new_indice,len(text)):
 						if(text[new_indice] == '}'):
 							indice = new_indice
-							tabela.append([cadeia,"Erro lexico na linha "+ str(linha) +": comentario de varias linhas"])
+							tabela.append(["erro","Erro lexico na linha "+ str(linha) +": comentario de varias linhas"])
 							verify = False
 							return indice+1, tabela, verify
-					cadeia_id = [cadeia, "Erro lexico na linha "+ str(linha) +": comentario nao finalizado"]
+					cadeia_id = ["erro", "Erro lexico na linha "+ str(linha) +": comentario nao finalizado"]
 					tabela.append(cadeia_id)
 					#indice = indice+1
 					verify = False
@@ -155,7 +155,7 @@ def automato_numero(text,indice,linha,tabela,verify):
 						elif(ord(text[f]) == 46):
 							cadeia = cadeia + text[f]
 						else:
-							cadeia_id = [cadeia,"Erro lexico na linha "+ str(linha) +": numero invalido"]
+							cadeia_id = ["erro","Erro lexico na linha "+ str(linha) +": numero invalido"]
 							tabela.append(cadeia_id)
 							verify = False
 							return f, tabela,verify
@@ -171,7 +171,7 @@ def automato_numero(text,indice,linha,tabela,verify):
 							cadeia_id = [cadeia, "num_float"]
 							tabela.append(cadeia_id)
 						string = "Erro lexico na linha "+ str(linha) +": caractere " + text[indice+1] + " invalido em id"
-						cadeia_falsa = [text[indice+1], string]
+						cadeia_falsa = [erro, string]
 						tabela.append(cadeia_falsa)
 						verify = False
 						return indice,tabela,verify
@@ -344,33 +344,37 @@ def nextToken(tabela,i,text):
 		return tabela,i
 '''
 def nextToken(tabela,i,linha,text):
-		verify = True
-		tamanho = len(tabela)
-
-		if(i == len(text)):
-			return tabela, i, linha
-
-		if(text[i] == "\n" or text[i] == "\t" or text[i] == " "):
-			if(text[i] == "\n"):
-				linha = linha+1
-			i = i + 1
+		aux = True
+		while(aux):
+			verify = True
+			tamanho = len(tabela)
 			if(i == len(text)):
-				return tabela, i, linhas
+				return tabela, i
 
-		a,tabela,verify = automato_comentario(text,i,linha,tabela,verify)
-		b,tabela,verify = automato_id(text,a,linha,tabela,verify)
-		c,tabela,verify = automato_numero(text,b,linha,tabela,verify)
-		d,tabela,verify = automato_comparativos(text,c,linha,tabela,verify)
-		e,tabela,verify = automato_simbolos(text,d,linha,tabela,verify)
-		f,tabela,verify = automato_operandos(text,e,linha,tabela,verify)
+			if(text[i] == "\n" or text[i] == "\t" or text[i] == " "):
+				if(text[i] == "\n"):
+					linha = linha+1
+				i = i + 1
+				if(i == len(text)):
+					return tabela, i
 
-		if(tamanho == len(tabela)):
-			if(text[f] != "\n" and text[f] != "\t" and text[f] != " "):
-				string = "Erro lexico na linha "+ str(linha) +": caractere" + text[i] + "invalido"
-				cadeia_falsa = [text[i], string]
+			a,tabela,verify = automato_comentario(text,i,linha,tabela,verify)
+			b,tabela,verify = automato_id(text,a,linha,tabela,verify)
+			c,tabela,verify = automato_numero(text,b,linha,tabela,verify)
+			d,tabela,verify = automato_comparativos(text,c,linha,tabela,verify)
+			e,tabela,verify = automato_simbolos(text,d,linha,tabela,verify)
+			f,tabela,verify = automato_operandos(text,e,linha,tabela,verify)
 
-				cadeia_id = [text[f], "Erro lexico: caractere invalido"]
-				tabela.append(cadeia_id)
+			if(tamanho == len(tabela)):
+				if(text[f] != "\n" and text[f] != "\t" and text[f] != " "):
+					string = "Erro lexico na linha "+ str(linha) +": caractere" + text[i] + "invalido"
+					cadeia_falsa = ["erro", string]
 
-		i = f
+					cadeia_id = ["erro", "Erro lexico na linha "+str(linha)+": caractere invalido"]
+					tabela.append(cadeia_id)
+			i = f
+			if(tabela[len(tabela)-1][0] != "erro"):
+				aux = False
+			else:
+				i=i+1
 		return tabela,i,linha
