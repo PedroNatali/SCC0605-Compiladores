@@ -1,6 +1,8 @@
+#Compilador
+#@authors Pedro Natali, Rafael Pinho and Patrick Feitosa
+
 import lexico
 import sintatico
-
 
 arquivo_entrada = "in_teste2.txt"
 arquivo_saida = "saida.txt"
@@ -14,11 +16,9 @@ if __name__ == '__main__':
 
 	#Criando a tabela 
 	tabela = []
-	#Enquanto nao terminar o texto, utilize os automatos
-	# while(i < len(text)):
-	# 	tabela,i = lexico.nextToken(tabela,i,text)
-	# 	i = i+1
 
+
+	#Chama o Compilador (Sintático rege as chamadas do Léxico)
 	sintatico.analisador_sintatico(tabela, i, text)
 
 	#Imprimindo a tabela

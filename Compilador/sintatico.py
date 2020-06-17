@@ -1,11 +1,10 @@
+#Analisador Sintático
+#@authors Pedro Natali, Rafael Pinho and Patrick Feitosa 
+
 import lexico
 
-######################################## ANALISADOR SINTÀTICO
 
-##### MELHOR MUDAR AS E CHAMAR A FUNCAO DO JEITO 
-###### token, i, linha = program(token, i, linha, text)
-	###### Pq dai eu n preciso chamar as funcoes uma dentro da outra necessariamente 
-
+#program := simb_program id; <dc> begin <cmd> end.
 def analisador_sintatico(tabela, i, text):
 	linha = 1
 	#Encontra o primeiro token
@@ -13,8 +12,45 @@ def analisador_sintatico(tabela, i, text):
 	token = tabela[len(tabela) - 1][1]
 	print(token)
 
-	#Passa para o program
-	token, i, linha = program(token,tabela, i, linha, text)	
+	#Analisa se é o program
+	if (token == "simb_program"):
+		i = i+1
+		tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
+		token = tabela[len(tabela)-1][1]
+		print(token)
+		if(token == "id"):
+			i = i + 1
+			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
+			token = tabela[len(tabela)-1][1]
+			print(token)
+		else:
+			print("Erro sintático na linha "+str(linha)+": id esperado")
+			string = "Erro sintático na linha "+str(linha)+": id esperado"
+			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
+			
+		if(token == "simb_pv"):
+			i = i + 1
+			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
+			token = tabela[len(tabela)-1][1]
+			print(token)
+		else:
+			print("Erro sintático na linha "+str(linha-1)+": ; esperado")
+			string = "Erro sintático na linha "+str(linha)+": ; esperado"
+			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
+			i = i + 1
+			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
+			token = tabela[len(tabela)-1][1]
+			print(token)
+	
+
 	#Passa para o dc_c
 	token, i, linha = dc_c(token,tabela, i, linha, text)
 	#Passa para o dc_v
@@ -69,49 +105,6 @@ def analisador_sintatico(tabela, i, text):
 
 	print(token)
 	print("FIM DO PROGRAMA")
-
-#program := simb_program id;
-def program(token, tabela, i, linha, text):
-	if (token == "simb_program"):
-		i = i+1
-		tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
-		token = tabela[len(tabela)-1][1]
-		print(token)
-		if(token == "id"):
-			i = i + 1
-			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
-			token = tabela[len(tabela)-1][1]
-			print(token)
-		else:
-			print("Erro sintático na linha "+str(linha)+": id esperado")
-			string = "Erro sintático na linha "+str(linha)+": id esperado"
-			tabela.append(["erro", string])
-			if(token == "id"):
-				i = i+1
-				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
-				token = tabela[len(tabela)-1][1]
-			
-		if(token == "simb_pv"):
-			i = i + 1
-			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
-			token = tabela[len(tabela)-1][1]
-			print(token)
-			print("saida do program")
-			return token, i, linha
-		else:
-			print("Erro sintático na linha "+str(linha-1)+": ; esperado")
-			string = "Erro sintático na linha "+str(linha)+": ; esperado"
-			tabela.append(["erro", string])
-			if(token == "id"):
-				i = i+1
-				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
-				token = tabela[len(tabela)-1][1]
-			i = i + 1
-			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
-			token = tabela[len(tabela)-1][1]
-			print(token)
-			print("saida do program")
-			return token, i, linha
 
 #declaracao de constante := simb_const id = simb_tipo;
 def dc_c(token, tabela, i, linha, text):
