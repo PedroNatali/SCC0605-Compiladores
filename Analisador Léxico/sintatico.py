@@ -430,13 +430,13 @@ def cmd(token,tabela,i,linha,text):
 		
 		# <condicao>
 		token, i, linha = condicao(token, tabela, i, linha, text)
-		print(token)
+		print(token+"BBBB")
 
 		if(token =="simb_then"):
 			i = i+1
 			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 			token = tabela[len(tabela)-1][1]
-			print(token)
+			print(token+"CCCCC")
 		else:
 			print("Erro sintático na linha "+str(linha)+": then esperado")
 
@@ -461,7 +461,7 @@ def cmd(token,tabela,i,linha,text):
 		while(token == "simb_read" or token == "simb_write" or token == "simb_if" or token == "simb_while" or token == "id" or token == "simb_for" or token =="simb_begin"):
 			token,i,linha = cmd(token,tabela,i,linha,text)
 			print(token+"AAAAAAAAA")
-			
+
 		if(token == "simb_end"):
 			i = i+1
 			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
@@ -494,6 +494,12 @@ def cmd(token,tabela,i,linha,text):
 			print(token)
 			token, i, linha = expressao(token,tabela,i,linha, text)
 			print(token+"AQUIAQUIAQUI")
+			if(token == "simb_pv"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
+				token = tabela[len(tabela)-1][1]
+				print(token)
+
 		elif(token == "simb_apar"):
 			i = i+1
 			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
