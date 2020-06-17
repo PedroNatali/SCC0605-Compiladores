@@ -2,16 +2,16 @@ program, simb_program
 nome2, id
 ;, simb_pv
 var, simb_var
-erro, Erro lexico na linha 2: caractere invalido
 a, id
 :, simb_dp
-real, simb_tipo
 ;, simb_pv
+erro, Erro sintático na linha 2: integer ou real esperado
 var, simb_var
+erro, Erro lexico na linha 3: caractere invalido
 b, id
 :, simb_dp
+integer, simb_tipo
 ;, simb_pv
-erro, Erro sintático na linha 3: integer ou real esperado
 procedure, simb_procedure
 nomep, id_procedure
 (, simb_apar
@@ -25,8 +25,7 @@ a, id
 ,, simb_v
 c, id
 :, simb_dp
-integera, id
-erro, Erro sintático na linha 5: integer ou real esperado
+integer, simb_tipo
 ;, simb_pv
 begin, simb_begin
 read, simb_read
@@ -53,7 +52,9 @@ x, id
 write, simb_write
 (, simb_apar
 a, id
+erro, Erro lexico na linha 11: caractere @ invalido em id
 ), simb_fpar
+erro, Erro sintático na linha 11: id esperado
 ;, simb_pv
 end, simb_end
 ;, simb_pv
@@ -65,8 +66,8 @@ a, id
 x, id
 ;, simb_pv
 end, simb_end
-;, simb_pv
 begin, simb_begin
+erro, Erro sintático na linha 14: ; esperado
 read, simb_read
 (, simb_apar
 b, id

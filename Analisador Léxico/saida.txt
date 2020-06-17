@@ -1,3 +1,0 @@
-Erro lexico na linha 2: caractere invalido
-Erro sintático na linha 3: integer ou real esperado
-Erro sintático na linha 5: integer ou real esperado

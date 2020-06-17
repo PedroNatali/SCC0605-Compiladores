@@ -8,11 +8,11 @@ read(c, a);
 if a<x+c then
 begin
 a:= c+x;
-write(a);
-end;
-else c:= a+x;
-end;
+write(axa1);
+end
+else ca:= a+x;
+en;
 begin
-read(b);
-nomep(b);
+readdd(b);
+nomeep(b);
 end.
