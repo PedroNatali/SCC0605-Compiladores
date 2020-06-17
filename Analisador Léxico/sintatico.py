@@ -297,9 +297,9 @@ def corpo_p(token, tabela, i, linha, text):
 		while(token == "simb_read" or token =="simb_write" or token == "simb_while" or token == "simb_if" or token == "id" or token == "simb_begin"):
 			token, i, linha = cmd(token, tabela, i, linha, text)
 			print(token + " Iteracao - cmd")
-			i = i+1
-			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
-			token = tabela[len(tabela)-1][1]
+			#i = i+1
+			#tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
+			#token = tabela[len(tabela)-1][1]
 			print(token)
 
 			# if(token == "simb_pv"):
@@ -333,6 +333,7 @@ def corpo_p(token, tabela, i, linha, text):
 
 def cmd(token,tabela,i,linha,text):
 	print(token)
+	#read(<variaveis>) ou write(<variaveis>)
 	if(token == "simb_read" or token == "simb_write"):
 		i = i+1
 		tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
@@ -345,23 +346,26 @@ def cmd(token,tabela,i,linha,text):
 		else:
 			print("Erro sintático na linha "+str(linha)+": ( esperado")
 		print(token)
+		# <variaveis> = id <mais_var>
 		if(token == "id"):
+			## <mais_var>
 			while(token == "id"):
 				i = i+1
 				tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 				token = tabela[len(tabela)-1][1]
-				if(token == "simb_v"):
+				if(token == "simb_v"): #  ","
 					print(token)
 					i = i+1
 					tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 					token = tabela[len(tabela)-1][1]
 					print(token)
-				elif(token == "simb_fpar"):
+				elif(token == "simb_fpar"): # ")"
 					break
 				else:
 					print("Erro sintático na linha "+str(linha)+": , esperado")
 		else:
 			print("ERRO: id")
+
 		if(token == "simb_fpar"):
 			print(token)
 			i = i+1
@@ -370,6 +374,7 @@ def cmd(token,tabela,i,linha,text):
 		else:
 			print("Erro sintático na linha "+str(linha)+": ) esperado")
 		print(token)
+
 		if(token == "simb_pv"):
 			i = i+1
 			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
@@ -378,6 +383,7 @@ def cmd(token,tabela,i,linha,text):
 		else:
 			print("Erro sintático na linha "+str(linha-1)+": ; esperado")
 			return token, i, linha
+	# while(<condicao>) do <cmd>
 	elif(token == "simb_while"):
 		i = i+1
 		tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
@@ -389,7 +395,7 @@ def cmd(token,tabela,i,linha,text):
 			token = tabela[len(tabela)-1][1]
 		else:
 			print("Erro sintático na linha "+str(linha)+": ( esperado")
-		#token, i, linha = condicao(token, tabela, i, linha, text)
+		token, i, linha = condicao(token, tabela, i, linha, text)
 		print(token)
 		if(token == "simb_fpar"):
 			i = i+1
@@ -405,11 +411,16 @@ def cmd(token,tabela,i,linha,text):
 		else:
 			print("Erro sintático na linha "+str(linha)+": do esperado")
 		return cmd(token,tabela,i,linha,text)
+	#if <condicao> then <cmd> <pfalsa>	
 	elif(token == "simb_if"):
+		print(token+": entrei")
 		i = i+1
 		tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 		token = tabela[len(tabela)-1][1]
-		#token, i, linha = condicao(token, tabela, i, linha, text)
+		
+		# <condicao>
+		token, i, linha = condicao(token, tabela, i, linha, text)
+		
 		print(token)
 		if(token =="simb_then"):
 			i = i+1
@@ -417,6 +428,7 @@ def cmd(token,tabela,i,linha,text):
 			token = tabela[len(tabela)-1][1]
 		else:
 			print("Erro sintático na linha "+str(linha)+": then esperado")
+
 		while(token == "simb_read" or token =="simb_write" or token == "simb_while" or token == "simb_if" or token == "id" or token == "simb_begin"):
 			token,i,linha= cmd(token,tabela,i,linha,text)
 			print(token)
@@ -428,6 +440,7 @@ def cmd(token,tabela,i,linha,text):
 				continue
 			else:
 				return token,i,linha
+	# begin <comando> end			
 	elif(token == "simb_begin"):
 		i = i+1
 		tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
@@ -452,6 +465,8 @@ def cmd(token,tabela,i,linha,text):
 			else:
 				print("Erro sintático na linha "+str(linha-1)+": ; esperado")
 				return token,i,linha
+	#id := <expresao>
+	#id <lista_arg>		
 	elif(token == "id"):
 		i = i+1
 		tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
@@ -490,6 +505,7 @@ def cmd(token,tabela,i,linha,text):
 				token = tabela[len(tabela)-1][1]
 				return token, i, linha 
 		else:
+			#print(token+": aqui")
 			print("Erro sintático na linha "+str(linha)+": := esperado")
 			return token, i, linha
 	return token, i, linha
@@ -498,7 +514,7 @@ def cmd(token,tabela,i,linha,text):
 def condicao(token, tabela, i, linha, text):
 	print("condicao")
 	#<expressao>
-	token,i = expressao(token,tabela,i,text)
+	token,i,linha= expressao(token,tabela,i,linha,text)
 	
 	# igual
 	if(token == "simb_igual"):
@@ -509,7 +525,7 @@ def condicao(token, tabela, i, linha, text):
 		token = tabela[len(tabela)-1][1]
 
 	# dif
-	elif(token == "simb_dif"):
+	elif(token == "simb_diferente"):
 		print(token)
 		# next_token	
 		i = i+1
@@ -551,12 +567,12 @@ def condicao(token, tabela, i, linha, text):
 		print("Erro sintatico: Falta de um simbolo de condicao")
 	
 	#<expressao>
-	token,i = expressao(token,tabela,i,text)
-	print("fim condicao")
+	token, i, linha = expressao(token,tabela,i,linha,text)
+	print("fim condicao:"+token)
 	return token,i,linha
 
 #<espressao>
-def expressao(token,tabela,i, text):
+def expressao(token,tabela,i,linha,text):
 	print("expressao")
 	## TALVEZ N PRECISE DISSO, TEM QUE VERIFICAR SE A FUNÇAO
 	## QUE CHAMA a expressao JA LEU O TOKEN
@@ -568,11 +584,11 @@ def expressao(token,tabela,i, text):
 	print(token)
 
 	# <termo> - pode ser simb_soma, simb_sub ou lambda
-	token,i = termo(token, tabela, i, linha, text)
+	token, i, linha = termo(token, tabela, i, linha, text)
 
 	# <outros_termos>
 	while(token == "simb_soma" or token == "simb_sub"):
-		token,i = termo(token, tabela, i, linha, text)
+		token,i, linha = termo(token, tabela, i, linha, text)
 	print("fim expressao")
 	return token, i, linha	
 
@@ -581,12 +597,13 @@ def termo(token, tabela, i, linha, text):
 
 	## <op_un>
 	if(token == "simb_soma" or token == "simb_sub"):
+		print(token)
 		i = i+1
 		tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 		token = tabela[len(tabela)-1][1]
 
 	## <fator> ## VERIFICAR SE ESSA CONDICAO PRECISA SER FEITA OU CHAMA FATOR DIRETO
-	if(token == "id" or token == "simb_tipo" or token == "simb_apar"):
+	if(token == "id" or token == "num_int" or token == "num_float" or token == "simb_apar"):
 		print(token)
 		token, i, linha = fator(token, tabela, i, linha, text)
 	else:## erro do fator
@@ -594,40 +611,52 @@ def termo(token, tabela, i, linha, text):
 
 	## <mais_fatores>
 	while(token == "simb_mult" or token == "simb_div"):
+		#next token
 		token, i, linha = fator(token, tabela, i, linha, text)
 
 	return token, i, linha
 	
 #<fator>
 def fator(token, tabela, i, linha, text):
+
+	#<op_mult>
+	if(token == "simb_mult" or token == "simb_div"): # "/" or "*"
+		print(token)
+
+		i = i+1
+		tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
+		token = tabela[len(tabela)-1][1]
+
 	
 	if(token == "id"): # ID
-	
+		print(token)
+		
 		i = i+1
 		tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 		token = tabela[len(tabela)-1][1]
 
+		
+	elif(token == "num_int" or token == "num_float"): # numero real ou int
 		print(token)
-
-	elif(token == "simb_tipo"): # numero real ou int
 
 		i = i+1
 		tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 		token = tabela[len(tabela)-1][1]
-
-		print(token)
 
 	#(<expressao>)
 	elif(token == "simb_apar"): # '('
-	
+		print(token)
+		
 		i = i+1
 		tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 		token = tabela[len(tabela)-1][1]
 		#print("expressao")
 		
-		token, i, linha = expressao(token,tabela,i, text)
+		token, i, linha = expressao(token, tabela, i, linha, text)
 		
 		if(token == "simb_fpar"): # ')'
+			print(token)
+			
 			i = i+1
 			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 			token = tabela[len(tabela)-1][1]
