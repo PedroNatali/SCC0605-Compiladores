@@ -1,8 +1,8 @@
 program nome2;
-var a: real;
-var b: integer;
+var @a: real;
+var b: ;
 procedure nomep(x: real);
-var a, c: integer;
+var a, c: integera;
 begin
 read(c, a);
 if a<x+c then

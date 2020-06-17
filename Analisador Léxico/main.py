@@ -2,7 +2,7 @@ import lexico
 import sintatico
 
 
-arquivo_entrada = "in_teste2.txt"
+arquivo_entrada = "in_test.txt"
 arquivo_saida = "saida.txt"
 arquivo_lexico = "saida_lexico.txt"
 

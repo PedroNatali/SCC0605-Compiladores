@@ -62,6 +62,10 @@ def analisador_sintatico(tabela, i, text):
 		print("Erro sintático na linha "+str(linha)+": begin esperadooioioioioioi")
 		string = "Erro sintático na linha "+str(linha)+": begin esperado"
 		tabela.append(["erro", string])
+		if(token == "id"):
+			i = i+1
+			tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+			token = tabela[len(tabela)-1][1]
 
 	print(token)
 	print("FIM DO PROGRAMA")
@@ -82,6 +86,10 @@ def program(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": id esperado")
 			string = "Erro sintático na linha "+str(linha)+": id esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 			
 		if(token == "simb_pv"):
 			i = i + 1
@@ -94,6 +102,10 @@ def program(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha-1)+": ; esperado")
 			string = "Erro sintático na linha "+str(linha)+": ; esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 			i = i + 1
 			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 			token = tabela[len(tabela)-1][1]
@@ -119,6 +131,10 @@ def dc_c(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": id esperado")
 			string = "Erro sintático na linha "+str(linha)+": id esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		if(token == "simb_igual"):
 			i = i + 1
@@ -129,6 +145,10 @@ def dc_c(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": = esperado")
 			string = "Erro sintático na linha "+str(linha)+": = esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 			#TALVEZ PRECISE COLOCAR SIMBOLO ESPECIAL PRA INT E FLOAT
 
 		if(token == "simb_int" or token == "simb_float"):
@@ -140,6 +160,10 @@ def dc_c(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": int ou float esperado")
 			string = "Erro sintático na linha "+str(linha)+": int ou float esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		if(token == "simb_pv"):
 			i = i + 1
@@ -150,6 +174,10 @@ def dc_c(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha-1)+": ; esperado")
 			string = "Erro sintático na linha "+str(linha)+": ; esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		if(token == "simb_const"):
 			print("recursao dc_c")
@@ -178,6 +206,10 @@ def dc_v(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": id esperado")
 			string = "Erro sintático na linha "+str(linha)+": id esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		while(token == "simb_v"):
 			i = i+1
@@ -192,6 +224,10 @@ def dc_v(token, tabela, i, linha, text):
 				print("Erro sintático na linha "+str(linha)+": id esperado")
 				string = "Erro sintático na linha "+str(linha)+": id esperado"
 				tabela.append(["erro", string])
+				if(token == "id"):
+					i = i+1
+					tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+					token = tabela[len(tabela)-1][1]
 
 		if (token == "simb_dp"):
 			i = i+1
@@ -202,6 +238,10 @@ def dc_v(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": : esperado")
 			string = "Erro sintático na linha "+str(linha)+": : esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		if(token == "simb_tipo"):
 			i = i+1
@@ -212,6 +252,10 @@ def dc_v(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": integer ou real esperado")
 			string = "Erro sintático na linha "+str(linha)+": integer ou real esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		if(token == "simb_pv"):
 			i = i +1
@@ -222,6 +266,10 @@ def dc_v(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha-1)+": ; esperado")
 			string = "Erro sintático na linha "+str(linha)+": ; esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		if(token == "simb_var"):
 			print("recursao dc_v")
@@ -253,6 +301,10 @@ def dc_p(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": id esperado")
 			string = "Erro sintático na linha "+str(linha)+": id esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 
 		if(token == "simb_apar"):
@@ -264,11 +316,19 @@ def dc_p(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": ( esperado")
 			string = "Erro sintático na linha "+str(linha)+": ( esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		if(token != "id"):
 			print("Erro sintático na linha "+str(linha)+": id esperado")
 			string = "Erro sintático na linha "+str(linha)+": id esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		while(token == "id"):
 			i = i+1
@@ -290,6 +350,10 @@ def dc_p(token, tabela, i, linha, text):
 					print("Erro sintático na linha "+str(linha)+": id esperado")
 					string = "Erro sintático na linha "+str(linha)+": id esperado"
 					tabela.append(["erro", string])
+					if(token == "id"):
+						i = i+1
+						tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+						token = tabela[len(tabela)-1][1]
 
 		if(token == "simb_dp"):
 			i = i+1
@@ -300,6 +364,10 @@ def dc_p(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": : esperado")
 			string = "Erro sintático na linha "+str(linha)+": : esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 		
 		if(token == "simb_tipo"):
 			i = i+1
@@ -310,6 +378,10 @@ def dc_p(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": integer ou real esperado")
 			string = "Erro sintático na linha "+str(linha)+": integer ou real esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		if (token == "simb_fpar"):
 			i = i+1
@@ -320,6 +392,10 @@ def dc_p(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": ) esperado")
 			string = "Erro sintático na linha "+str(linha)+": ) esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		if(token == "simb_pv"):
 			i = i+1
@@ -334,6 +410,10 @@ def dc_p(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": ; esperado")
 			string = "Erro sintático na linha "+str(linha)+": ; esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 			return token, i, linha
 
 	else:
@@ -376,6 +456,10 @@ def corpo_p(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": end esperado")
 			string = "Erro sintático na linha "+str(linha)+": end esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 		if(token == "simb_pv"):
 			i = i+1
 			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
@@ -386,12 +470,20 @@ def corpo_p(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha-1)+": ; esperado")
 			string = "Erro sintático na linha "+str(linha-1)+": ; esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 			return token, i, linha
 		return token, i, linha
 	else:
 		print("Erro sintático na linha "+str(linha)+": begin esperado")
 		string = "Erro sintático na linha "+str(linha)+": begin esperado"
 		tabela.append(["erro", string])
+		if(token == "id"):
+			i = i+1
+			tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+			token = tabela[len(tabela)-1][1]
 		return token, i, linha
 
 def cmd(token,tabela,i,linha,text):
@@ -412,6 +504,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha)+": ( esperado")
 			string = "Erro sintático na linha "+str(linha)+": ( esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		# <variaveis> = id <mais_var>
 		if(token == "id"):
@@ -432,10 +528,18 @@ def cmd(token,tabela,i,linha,text):
 					print("Erro sintático na linha "+str(linha)+": , esperado")
 					string = "Erro sintático na linha "+str(linha)+": , esperado"
 					tabela.append(["erro", string])
+					if(token == "id"):
+						i = i+1
+						tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+						token = tabela[len(tabela)-1][1]
 		else:
 			print("ERRO: id")
 			string = "Erro sintático na linha "+str(linha)+": id esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		if(token == "simb_fpar"):
 			i = i+1
@@ -446,6 +550,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha)+": ) esperado")
 			string = "Erro sintático na linha "+str(linha)+": ) esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		if(token == "simb_pv"):
 			i = i+1
@@ -457,6 +565,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha-1)+": ; esperado")
 			string = "Erro sintático na linha "+str(linha)+": ; esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 			return token, i, linha
 
 	# while(<condicao>) do <cmd>
@@ -474,6 +586,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha)+": ( esperado")
 			string = "Erro sintático na linha "+str(linha)+": ( esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		token, i, linha = condicao(token, tabela, i, linha, text)
 		print(token)
@@ -487,6 +603,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha)+": ) esperado")
 			string = "Erro sintático na linha "+str(linha)+": ) esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		if(token == "simb_do"):
 			i = i+1
@@ -497,6 +617,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha)+": do esperado")
 			string = "Erro sintático na linha "+str(linha)+": do esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 		return cmd(token,tabela,i,linha,text)
 	#if <condicao> then <cmd> <pfalsa>	
 	elif(token == "simb_if"):
@@ -518,6 +642,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha)+": then esperado")
 			string = "Erro sintático na linha "+str(linha)+": then esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 
 		while(token == "simb_read" or token =="simb_write" or token == "simb_while" or token == "simb_if" or token == "id" or token == "simb_begin"):
 			token,i,linha= cmd(token,tabela,i,linha,text)
@@ -550,6 +678,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha)+": end esperado")
 			string = "Erro sintático na linha "+str(linha)+": end esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 		if(token == "simb_pv"):
 			i = i+1
 			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
@@ -562,6 +694,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha)+": ; esperado")
 			string = "Erro sintático na linha "+str(linha)+": ; esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 			return token,i,linha
 	#id := <expresao>
 	#id <lista_arg>		
@@ -605,10 +741,18 @@ def cmd(token,tabela,i,linha,text):
 						print("Erro sintático na linha "+str(linha-1)+": ; esperado")
 						string = "Erro sintático na linha "+str(linha)+": ; esperado"
 						tabela.append(["erro", string])
+						if(token == "id"):
+							i = i+1
+							tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+							token = tabela[len(tabela)-1][1]
 			else:
 				print("ERRO: id")
 				string = "Erro sintático na linha "+str(linha)+": id esperado"
 				tabela.append(["erro", string])
+				if(token == "id"):
+					i = i+1
+					tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+					token = tabela[len(tabela)-1][1]
 				print(token)
 			if(token == "simb_fpar"):
 				i = i+1
@@ -621,6 +765,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha)+": := esperado")
 			string = "Erro sintático na linha "+str(linha)+": := esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 			return token, i, linha
 	elif(token == "id_procedure"):
 		i = i+1
@@ -636,6 +784,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha-1)+": ( esperado")
 			string = "Erro sintático na linha "+str(linha)+": ( esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 		if(token == "id"):
 			while(token == "id"):
 				i = i+1
@@ -654,6 +806,10 @@ def cmd(token,tabela,i,linha,text):
 					print("Erro sintático na linha "+str(linha-1)+": , esperado")
 					string = "Erro sintático na linha "+str(linha)+": , esperado"
 					tabela.append(["erro", string])
+					if(token == "id"):
+						i = i+1
+						tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+						token = tabela[len(tabela)-1][1]
 		if(token == "simb_fpar"):
 			i = i+1
 			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
@@ -663,6 +819,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha)+": ) esperado")
 			string = "Erro sintático na linha "+str(linha)+": ) esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 		if(token == "simb_pv"):
 			i = i+1
 			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
@@ -673,6 +833,10 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha)+": ; esperado")
 			string = "Erro sintático na linha "+str(linha)+": ; esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 			return token, i, linha
 	return token, i, linha
 
@@ -733,6 +897,10 @@ def condicao(token, tabela, i, linha, text):
 		print("Erro sintatico: Falta de um simbolo de condicao")
 		string = "Erro sintático na linha "+str(linha)+": Falta de um simbolo de condição"
 		tabela.append(["erro", string])
+		if(token == "id"):
+			i = i+1
+			tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+			token = tabela[len(tabela)-1][1]
 	
 	#<expressao>
 	token, i, linha = expressao(token,tabela,i,linha,text)
@@ -778,6 +946,10 @@ def termo(token, tabela, i, linha, text):
 		print("Erro sintático na linha "+str(linha)+": fator esperado")
 		string = "Erro sintático na linha "+str(linha)+": fator esperado"
 		tabela.append(["erro", string])
+		if(token == "id"):
+			i = i+1
+			tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+			token = tabela[len(tabela)-1][1]
 
 	## <mais_fatores>
 	while(token == "simb_mult" or token == "simb_div"):
@@ -834,11 +1006,19 @@ def fator(token, tabela, i, linha, text):
 			print("Erro sintático na linha "+str(linha)+": : ')' esperado")
 			string = "Erro sintático na linha "+str(linha)+": ) esperado"
 			tabela.append(["erro", string])
+			if(token == "id"):
+				i = i+1
+				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+				token = tabela[len(tabela)-1][1]
 	else:
 		## talvez n precise dessa condicao,
 		print("Erro sintático na linha "+str(linha)+": expressao esperado")
 		string = "Erro sintático na linha "+str(linha)+": expressao esperado"
 		tabela.append(["erro", string])
+		if(token == "id"):
+			i = i+1
+			tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
+			token = tabela[len(tabela)-1][1]
 
 
 	return token, i, linha
