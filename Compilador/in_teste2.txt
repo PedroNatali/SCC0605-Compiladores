@@ -1,18 +1,25 @@
-program nome2;
-var a: ;
-var @b: integer;
+program nome2; {exemplo 2
+
+}
+var a: real;
+var b: integer;
 procedure nomep(x: real);
-var a, c: integer;
+var a, c: integer
 begin
+for b:=1 to do
+begin
+b:=b+2;
+a:=a-1;
+end;
 read(c, a);
 if a<x+c then
 begin
 a:= c+x;
-write(a@);
+write(a);
 end;
 else c:= a+x;
-end
-begin
+end;
+begin {programa principal
 read(b);
 nomep(b);
 end.
