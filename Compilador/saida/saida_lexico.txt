@@ -1,7 +1,7 @@
 program, simb_program
 nome2, id
 ;, simb_pv
-erro, Erro lexico na linha 1: comentario de varias linhas
+erro, Erro lexico na linha 3: comentario de varias linhas
 var, simb_var
 a, id
 :, simb_dp
@@ -27,14 +27,14 @@ c, id
 :, simb_dp
 integer, simb_tipo
 begin, simb_begin
-erro, Erro sintático na linha 4: ; esperado
+erro, Erro sintático na linha 7: ; esperado
 for, simb_for
 b, id
 :=, simb_atrib
 1, num_int
 to, simb_to
 do, simb_do
-erro, Erro sintático na linha 6: valor invalido em for
+erro, Erro sintático na linha 9: valor invalido em for
 begin, simb_begin
 b, id
 :=, simb_atrib
@@ -88,7 +88,7 @@ x, id
 end, simb_end
 ;, simb_pv
 begin, simb_begin
-erro, Erro lexico na linha 19: comentario nao finalizado
+erro, Erro lexico na linha 22: comentario nao finalizado
 read, simb_read
 (, simb_apar
 b, id

@@ -383,5 +383,4 @@ def nextToken(tabela,i,linha,text):
 			#elif(tabela[len(tabela)-1][1] == ):
 			else:
 				i=i+1
-		print("\nlinha:  "+str(linha))
 		return tabela,i,linha

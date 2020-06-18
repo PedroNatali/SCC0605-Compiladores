@@ -1,4 +1,4 @@
-Erro lexico na linha 1: comentario de varias linhas
-Erro sintático na linha 4: ; esperado
-Erro sintático na linha 6: valor invalido em for
-Erro lexico na linha 19: comentario nao finalizado
+Erro lexico na linha 3: comentario de varias linhas
+Erro sintático na linha 7: ; esperado
+Erro sintático na linha 9: valor invalido em for
+Erro lexico na linha 22: comentario nao finalizado
