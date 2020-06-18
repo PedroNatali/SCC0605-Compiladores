@@ -4,7 +4,7 @@
 import lexico
 import sintatico
 
-arquivo_entrada = "./entrada/programa.txt"
+arquivo_entrada = "./entrada/programa2.txt"
 arquivo_saida = "./saida/saida.txt"
 arquivo_lexico = "./saida/saida_lexico.txt"
 

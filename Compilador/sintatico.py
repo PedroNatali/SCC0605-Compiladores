@@ -67,7 +67,7 @@ def analisador_sintatico(tabela, i, text):
 			
 			if(token == "simb_p"):
 				break
-				
+
 			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 			token = tabela[len(tabela)-1][1]
 
@@ -266,7 +266,6 @@ def dc_v(token, tabela, i, linha, text):
 			return token, i, linha
 
 	else:
-		print("saida do dc_v")
 		return token, i, linha
 
 #declaracao de procedure: simb_procedure id_procedure ( id(,id) : simb_tipo ); <corpo_p>
