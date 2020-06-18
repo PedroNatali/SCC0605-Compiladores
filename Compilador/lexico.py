@@ -2,7 +2,6 @@
 #@authors Pedro Natali, Rafael Pinho and Patrick Feitosa
 
 #adicionado simb_to, erro de funcao escrita errada, adicionado procedure, adicionado constante, concertado simbolo maior
-#testes 1* 2 4 5 6 tao ok
 
 #Tabela de simbolos especiais
 tab_especiais = [["program","simb_program"], ["begin","simb_begin"], ["end", "simb_end"], ["const","simb_const"], ["var","simb_var"],
@@ -96,6 +95,7 @@ def automato_id(text,indice,linha,tabela,verify):
 
 #automato que delimita comentarios
 def automato_comentario(text,indice,linha,tabela,verify):
+	linha2 = linha
 	if(verify):
 		if text[indice] == '{':
 			indice = indice+1
@@ -103,24 +103,27 @@ def automato_comentario(text,indice,linha,tabela,verify):
 			for indice in range(indice,len(text)):
 				if text[indice] == '}':
 					cadeia = cadeia + '}'
-					cadeia_id = [cadeia , "comentario"]
+					cadeia_id = ["comentario" , "comentario"]
 					tabela.append(cadeia_id)
 					indice = indice+1
 					verify = False
 					return indice, tabela,verify
 				elif(ord(text[indice]) == 10 or ord(text[indice]) == 12):
+					linha2 =linha2 + 1
 					new_indice = indice
 					for new_indice in range(new_indice,len(text)):
 						if(text[new_indice] == '}'):
 							indice = new_indice
-							tabela.append(["erro","Erro lexico na linha "+ str(linha) +": comentario de varias linhas"])
+							tabela.append(["erro","Erro lexico na linha "+ str(linha2-1) +": comentario de varias linhas",linha2-1])
 							verify = False
 							return indice+1, tabela, verify
+						elif(text[new_indice] == '\n'):
+							linha2 = linha2+1
 					cadeia_id = ["erro", "Erro lexico na linha "+ str(linha) +": comentario nao finalizado"]
 					tabela.append(cadeia_id)
 					#indice = indice+1
 					verify = False
-					return indice, tabela, verify
+					return indice-1, tabela, verify
 				else:
 					cadeia = cadeia + text[indice]
 		else:
@@ -373,8 +376,12 @@ def nextToken(tabela,i,linha,text):
 					cadeia_id = ["erro", "Erro lexico na linha "+str(linha)+": caractere invalido"]
 					tabela.append(cadeia_id)
 			i = f
-			if(tabela[len(tabela)-1][0] != "erro"):
+			if(tabela[len(tabela)-1][0] != "erro" and tabela[len(tabela)-1][0] != "comentario"):
 				aux = False
+			elif( len(tabela[len(tabela)-1]) == 3 ):
+				linha = tabela[len(tabela)-1][2]
+			#elif(tabela[len(tabela)-1][1] == ):
 			else:
 				i=i+1
+		print("\nlinha:  "+str(linha))
 		return tabela,i,linha
