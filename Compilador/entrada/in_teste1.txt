@@ -1,8 +1,0 @@
-program teste1;
-var a, b: integer;
-begin
-if ((a+1)*5.4)<>(8*b+9)*10/f then 
-begin
-a:= c+x;
-end;
-end.

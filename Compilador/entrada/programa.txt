@@ -1,7 +1,22 @@
-program p;
-var x@: integer;
+program meuprograma;
+const b = int;
+var a@: integer;
+procedure nomep(x:real);
+var e,z: integer;
 begin
-	x:=1;
-	while (x<3.5) do
-		x:=x+1;
+read(b);
+write(c);
+for b:=1 to 10 do
+begin
+b:=b+2;
+a:=a-1;
+;
+end
+begin
+read(@a,b);
+while (b > a do
+begin
+write(a);
+a := a + 1;
+end;
 end.

@@ -1,4 +1,6 @@
-Erro lexico na linha 3: comentario de varias linhas
-Erro sintático na linha 7: ; esperado
-Erro sintático na linha 9: valor invalido em for
-Erro lexico na linha 22: comentario nao finalizado
+Erro lexico na linha 3: caractere @ invalido em id
+Erro sintático na linha 3: id esperado
+Erro sintático na linha 13: end esperado
+Erro sintático na linha 14: ; esperado
+Erro lexico na linha 16: caractere invalido
+Erro sintático na linha 17: ) esperado

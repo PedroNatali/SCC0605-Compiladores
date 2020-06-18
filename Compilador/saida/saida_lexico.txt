@@ -1,15 +1,16 @@
 program, simb_program
-nome2, id
+meuprograma, id
 ;, simb_pv
-erro, Erro lexico na linha 3: comentario de varias linhas
+const, simb_const
+b, id
+=, simb_igual
+int, simb_int
+;, simb_pv
 var, simb_var
 a, id
+erro, Erro lexico na linha 3: caractere @ invalido em id
 :, simb_dp
-real, simb_tipo
-;, simb_pv
-var, simb_var
-b, id
-:, simb_dp
+erro, Erro sintático na linha 3: id esperado
 integer, simb_tipo
 ;, simb_pv
 procedure, simb_procedure
@@ -21,20 +22,30 @@ real, simb_tipo
 ), simb_fpar
 ;, simb_pv
 var, simb_var
-a, id
+e, id
 ,, simb_v
-c, id
+z, id
 :, simb_dp
 integer, simb_tipo
+;, simb_pv
 begin, simb_begin
-erro, Erro sintático na linha 7: ; esperado
+read, simb_read
+(, simb_apar
+b, id
+), simb_fpar
+;, simb_pv
+write, simb_write
+(, simb_apar
+c, id
+), simb_fpar
+;, simb_pv
 for, simb_for
 b, id
 :=, simb_atrib
 1, num_int
 to, simb_to
+10, num_int
 do, simb_do
-erro, Erro sintático na linha 9: valor invalido em for
 begin, simb_begin
 b, id
 :=, simb_atrib
@@ -48,56 +59,39 @@ a, id
 -, simb_sub
 1, num_int
 ;, simb_pv
-end, simb_end
 ;, simb_pv
+erro, Erro sintático na linha 13: end esperado
+end, simb_end
+begin, simb_begin
+erro, Erro sintático na linha 14: ; esperado
 read, simb_read
 (, simb_apar
-c, id
-,, simb_v
+erro, Erro lexico na linha 16: caractere invalido
 a, id
+,, simb_v
+b, id
 ), simb_fpar
 ;, simb_pv
-if, simb_if
+while, simb_while
+(, simb_apar
+b, id
+>, simb_maior
 a, id
-<, simb_menor
-x, id
-+, simb_soma
-c, id
-then, simb_then
+do, simb_do
+erro, Erro sintático na linha 17: ) esperado
 begin, simb_begin
-a, id
-:=, simb_atrib
-c, id
-+, simb_soma
-x, id
-;, simb_pv
 write, simb_write
 (, simb_apar
 a, id
 ), simb_fpar
 ;, simb_pv
-end, simb_end
-;, simb_pv
-else, simb_else
-c, id
+a, id
 :=, simb_atrib
 a, id
 +, simb_soma
-x, id
+1, num_int
 ;, simb_pv
 end, simb_end
-;, simb_pv
-begin, simb_begin
-erro, Erro lexico na linha 22: comentario nao finalizado
-read, simb_read
-(, simb_apar
-b, id
-), simb_fpar
-;, simb_pv
-nomep, id_procedure
-(, simb_apar
-b, id
-), simb_fpar
 ;, simb_pv
 end, simb_end
 ., simb_p

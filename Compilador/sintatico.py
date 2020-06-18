@@ -67,6 +67,7 @@ def analisador_sintatico(tabela, i, text):
 			
 			if(token == "simb_p"):
 				break
+				
 			tabela, i, linha = lexico.nextToken(tabela, i, linha, text)
 			token = tabela[len(tabela)-1][1]
 
@@ -92,7 +93,7 @@ def analisador_sintatico(tabela, i, text):
 	# else:
 	# 	print("Erro sintático na linha "+str(linha)+": . esperado")
 	else:
-		print("Erro sintático na linha "+str(linha)+": begin esperadooioioioioioi")
+		print("Erro sintático na linha "+str(linha)+": begin esperado")
 		string = "Erro sintático na linha "+str(linha)+": begin esperado"
 		tabela.append(["erro", string])
 		if(token == "id"):
@@ -742,6 +743,7 @@ def cmd(token,tabela,i,linha,text):
 			print("Erro sintático na linha "+str(linha)+": := esperado")
 			string = "Erro sintático na linha "+str(linha)+": := esperado"
 			tabela.append(["erro", string])
+
 			if(token == "id"):
 				i = i+1
 				tabela, i, linha = lexico.nextToken(tabela,i,linha,text)
