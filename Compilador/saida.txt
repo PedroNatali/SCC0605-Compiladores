@@ -1,5 +1,0 @@
-Erro sintático na linha 2: integer ou real esperado
-Erro lexico na linha 3: caractere invalido
-Erro lexico na linha 11: caractere @ invalido em id
-Erro sintático na linha 11: id esperado
-Erro sintático na linha 14: ; esperado

@@ -4,9 +4,9 @@
 import lexico
 import sintatico
 
-arquivo_entrada = "in_teste2.txt"
-arquivo_saida = "saida.txt"
-arquivo_lexico = "saida_lexico.txt"
+arquivo_entrada = "./entrada/in_teste2.txt"
+arquivo_saida = "./saida/saida.txt"
+arquivo_lexico = "./saida/saida_lexico.txt"
 
 if __name__ == '__main__':
 	saida = open(arquivo_saida,'w')

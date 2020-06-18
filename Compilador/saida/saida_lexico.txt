@@ -1,13 +1,13 @@
 program, simb_program
 nome2, id
 ;, simb_pv
+erro, Erro lexico na linha 1: comentario de varias linhas
 var, simb_var
 a, id
 :, simb_dp
+real, simb_tipo
 ;, simb_pv
-erro, Erro sintático na linha 2: integer ou real esperado
 var, simb_var
-erro, Erro lexico na linha 3: caractere invalido
 b, id
 :, simb_dp
 integer, simb_tipo
@@ -26,8 +26,30 @@ a, id
 c, id
 :, simb_dp
 integer, simb_tipo
-;, simb_pv
 begin, simb_begin
+erro, Erro sintático na linha 4: ; esperado
+for, simb_for
+b, id
+:=, simb_atrib
+1, num_int
+to, simb_to
+do, simb_do
+erro, Erro sintático na linha 6: valor invalido em for
+begin, simb_begin
+b, id
+:=, simb_atrib
+b, id
++, simb_soma
+2, num_int
+;, simb_pv
+a, id
+:=, simb_atrib
+a, id
+-, simb_sub
+1, num_int
+;, simb_pv
+end, simb_end
+;, simb_pv
 read, simb_read
 (, simb_apar
 c, id
@@ -52,9 +74,7 @@ x, id
 write, simb_write
 (, simb_apar
 a, id
-erro, Erro lexico na linha 11: caractere @ invalido em id
 ), simb_fpar
-erro, Erro sintático na linha 11: id esperado
 ;, simb_pv
 end, simb_end
 ;, simb_pv
@@ -66,8 +86,9 @@ a, id
 x, id
 ;, simb_pv
 end, simb_end
+;, simb_pv
 begin, simb_begin
-erro, Erro sintático na linha 14: ; esperado
+erro, Erro lexico na linha 19: comentario nao finalizado
 read, simb_read
 (, simb_apar
 b, id
